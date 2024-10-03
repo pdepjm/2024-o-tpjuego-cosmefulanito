@@ -1,17 +1,16 @@
 import wollok.game.*
 
-import pepita.*
+import obejcts.*
 
 program PepitaGame {
-	game.clear()
-	game.boardGround("pitch.jpg")
 	game.title("Pepita")
+	game.boardGround("canchita.jpg")
 	game.height(10)
 	game.width(10)
 	game.cellSize(100)
 	
-	const jugador1 = new Jugador(velocidad = 50, energia = 100)
-	const jugador2 = new Jugador(velocidad = 75, energia = 100)
+	const jugador1 = new Jugador(velocidad = 50, energia = 100, imagen = "golondrina.png")
+	const jugador2 = new Jugador(velocidad = 75, energia = 100, imagen = "playerdefault.png")
 
 	game.addVisual(jugador1)
 	game.addVisual(jugador2)
