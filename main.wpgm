@@ -3,6 +3,8 @@ import wollok.game.*
 import pepita.*
 
 program PepitaGame {
+	game.clear()
+	game.boardGround("pitch.jpg")
 	game.title("Pepita")
 	game.height(10)
 	game.width(10)
@@ -19,10 +21,10 @@ program PepitaGame {
 	keyboard.s().onPressDo({ jugador1.moverteAbajo(1) })
 	keyboard.d().onPressDo({ jugador1.moverteDerecha(1) })
 
-	keyboard.w().onPressDo({ jugador2.moverteArriba(1) })
-	keyboard.a().onPressDo({ jugador2.moverteIzquierda(1) })
-	keyboard.s().onPressDo({ jugador2.moverteAbajo(1) })
-	keyboard.d().onPressDo({ jugador2.moverteDerecha(1) })
+	keyboard.i().onPressDo({ jugador2.moverteArriba(1) })
+	keyboard.j().onPressDo({ jugador2.moverteIzquierda(1) })
+	keyboard.k().onPressDo({ jugador2.moverteAbajo(1) })
+	keyboard.l().onPressDo({ jugador2.moverteDerecha(1) })
 
 	game.start()
 }
