@@ -10,7 +10,7 @@ program PepitaGame {
 	game.cellSize(100)
 	
 	const jugador1 = new Jugador(velocidad = 50, energia = 100, imagen = "golondrina.png")
-	const jugador2 = new Jugador(velocidad = 75, energia = 100, imagen = "playerdefault.png")
+	const jugador2 = new Jugador(velocidad = 75, energia = 100, imagen = "jugadorsito.png")
 
 	game.addVisual(jugador1)
 	game.addVisual(jugador2)
