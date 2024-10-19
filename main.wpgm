@@ -1,5 +1,4 @@
 import wollok.game.*
-
 import objects.*
 
 program PepitaGame {
@@ -9,42 +8,38 @@ program PepitaGame {
     game.width(100)
     game.cellSize(10)
 
-//CREAR OBJETOS 
+//OBJETOS 
 
     const jugador1 = new Jugador( cansancio = 0, imagen = "brasil2.png")
     const jugador2 = new Jugador( cansancio = 0, imagen = "jugadorsito.png")
+	const golondrina = new Consumible( energia = 30, imagen = "golondrina.png")
 
-//ADD VISUAL OBJETOS
+//VISUALS
 
     game.addVisual(jugador1)
-
     game.addVisual(jugador2)
-
-    game.addVisual(banana)
+    game.addVisual(golondrina)
 
 //EVENTOS
 
-    game.whenCollideDo(banana, { elemento =>
-    game.say(elemento,elemento.howAreYou())
-    elemento.recuperarEnergia(banana.energia())
-    //AÑADIR UN REMOVE PARA EL VISUAL
-    })
+    game.whenCollideDo(golondrina, { elemento => 
+		game.say(elemento,elemento.hablar())
+    	elemento.recuperarEnergia(golondrina.energia())
+		}) //AÑADIR UN REMOVE PARA EL VISUAL.
 
-
-
-    //TENEMOS QUE HACER QUE CUANDO PASE CIERTA CANTIDAD DE TICKS LA BANANA O CUALQUIER ITEM REAPARESCA, Y QUE EN COLISION DESAPARESCA 
-    game.onTick(30000, "movimiento", { banana.movete() })
-    game.onTick(2000, "movimiento", { jugador1.recuperarEnergia(10) })
+    //TENEMOS QUE HACER QUE CUANDO PASE CIERTA CANTIDAD DE TICKS EL ITEM REAPAREZCA, Y QUE CON LA COLISION DESAPAREZCA.
+    game.onTick(10000, "movimiento", { golondrina.movete() })
+    game.onTick(1000, "movimiento", { jugador1.recuperarEnergia(10) })
 
     keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
     keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })
     keyboard.s().onPressDo({ jugador1.moverteAbajo(5) })
     keyboard.d().onPressDo({ jugador1.moverteDerecha(5) })
 
-    keyboard.i().onPressDo({ jugador2.moverteArriba(5) })
-    keyboard.j().onPressDo({ jugador2.moverteIzquierda(5) })
-    keyboard.k().onPressDo({ jugador2.moverteAbajo(5) })
-    keyboard.l().onPressDo({ jugador2.moverteDerecha(5) })
+    keyboard.up().onPressDo({ jugador2.moverteArriba(5) })
+    keyboard.left().onPressDo({ jugador2.moverteIzquierda(5) })
+    keyboard.down().onPressDo({ jugador2.moverteAbajo(5) })
+    keyboard.right().onPressDo({ jugador2.moverteDerecha(5) })
 
     game.start()
 } 

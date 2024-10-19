@@ -1,0 +1,9 @@
+- [ ] Cambiar background por una mejor cancha.
+- [ ] Agregar más consumibles (objetos distintos).
+- [ ] Agregar la pelota.
+- [ ] Modelar interacción con la pelota.
+- [ ] Revisar colisión con golondrina provisoria.
+- [ ] Modelar colisión con jugador rival? (que lo empuje).
+- [ ] Agregar sonidos (de fondo, en colisiones, etc.).
+- [ ] Modelar mecánica de goles............y de fin de partida.
+- [ ] Agregar menú?

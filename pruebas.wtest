@@ -1,9 +1,25 @@
-import pepita.*
+import objects.*
+import main.*
 
-describe "group of tests for pepita" {
-
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+describe "group of tests for jugador" {
+  
+  const jugador = new Jugador(cansancio = 0, imagen = "brasil2.png")
+  
+  test "el jugador arranca con cansancio 0" {
+    assert.equals(0, jugador.cansancio())
   }
+
+  test "el jugador pierde energia al moverse hacia arriba" {
+    jugador.moverteArriba(20)
+    assert.equals(20, jugador.cansancio())
+  }
+
+  test "el jugador recupera energía" {
+    jugador.cansarse(50)
+    jugador.recuperarEnergia(20)
+    assert.equals(30, jugador.cansancio())
+  }
+
+// assert.that(game.onTick(10000, "movimiento", { jugador.cansancio(0)}))
 
 }
