@@ -1,7 +1,7 @@
 import wollok.game.*
 import objects.*
 
-program PepitaGame {
+program FulbotGame {
     game.title("Fulbot")
     game.boardGround("pitch.jpg")
     game.height(100)
@@ -10,26 +10,27 @@ program PepitaGame {
 
 //OBJETOS 
 
-    const jugador1 = new Jugador( cansancio = 0, imagen = "brasil2.png")
-    const jugador2 = new Jugador( cansancio = 0, imagen = "jugadorsito.png")
-	const golondrina = new Consumible( energia = 30, imagen = "golondrina.png")
+    const jugador1 = new Jugador( cansancio = 0, imagen = "brasilero.png")
+    const jugador2 = new Jugador( cansancio = 0, imagen = "argentino.png")
+	const gaseosa = new Consumible( energia = 30, imagen = "gaseosa.png")
 
 //VISUALS
 
     game.addVisual(jugador1)
     game.addVisual(jugador2)
-    game.addVisual(golondrina)
+    game.addVisual(gaseosa)
 
 //EVENTOS
 
-    game.whenCollideDo(golondrina, { elemento => 
+    game.whenCollideDo(gaseosa, { elemento => 
 		game.say(elemento,elemento.hablar())
-    	elemento.recuperarEnergia(golondrina.energia())
+    	elemento.recuperarEnergia(gaseosa.energia())
 		}) //AÑADIR UN REMOVE PARA EL VISUAL.
 
     //TENEMOS QUE HACER QUE CUANDO PASE CIERTA CANTIDAD DE TICKS EL ITEM REAPAREZCA, Y QUE CON LA COLISION DESAPAREZCA.
-    game.onTick(10000, "movimiento", { golondrina.movete() })
+    game.onTick(10000, "movimiento", { gaseosa.movete() })
     game.onTick(1000, "movimiento", { jugador1.recuperarEnergia(10) })
+    game.onTick(1000, "movimiento", { jugador2.recuperarEnergia(10) })
 
     keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
     keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })

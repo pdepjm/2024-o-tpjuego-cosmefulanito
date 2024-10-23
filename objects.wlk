@@ -47,7 +47,7 @@ class Jugador {
     }
   }
 
-  method hablar() = "Rico refresco!"
+  method hablar() = "Rica gaseosa!"
 }
 
 class Consumible {
