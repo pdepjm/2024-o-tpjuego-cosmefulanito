@@ -2,8 +2,9 @@
 - [X] Agregar más consumibles (objetos distintos).
 - [X] Agregar la pelota.
 - [ ] Modelar interacción con la pelota (que la patee en una direccion).
-- [ ] Revisar colisión con consumibles (que le suba la energia y que hable, y que el consumible desaparezca (y cómo vuelve a aparecer otro?)). 
+- [ ] Revisar colisión con consumibles (que el consumible desaparezca (y cómo vuelve a aparecer otro?)). 
 - [ ] Modelar colisión con jugador rival? (que lo empuje).
-- [ ] Agregar sonidos (de fondo, en colisiones, etc.).
+- [X] Agregar sonido de ambiente.
+- [ ] Agregar sonidos de colisiones.
 - [ ] Modelar mecánica de goles............y de fin de partida.
 - [ ] Agregar menú?

@@ -12,9 +12,11 @@ program FulbotGame {
 
     const sonidoAmbiente = game.sound("sonidoAmbiente.mp3")
     sonidoAmbiente.shouldLoop(true)
-    keyboard.m().onPressDo({sonidoAmbiente.volume(0)})
-    //keyboard.n().onPressDo({sonidoAmbiente.volume(50)}) //Por alguna razon da EvaluationError...
-    game.schedule(500, { sonidoAmbiente.play()} )
+    game.schedule(500, {
+        sonidoAmbiente.play()
+        keyboard.m().onPressDo({sonidoAmbiente.volume(0)})
+        //keyboard.n().onPressDo({sonidoAmbiente.volume(50)}) Por alguna razon da EvaluationError al presionar 'n'...
+    })
 
 // TECLAS DE MOVIMIENTO
 
