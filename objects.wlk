@@ -1,7 +1,7 @@
 class Jugador {
   var cansancio = 0
   const imagen 
-  const position = new MutablePosition(x=50, y=50)
+  const position = game.center()
 
   method cansancio() = cansancio
   method image() = imagen
@@ -47,21 +47,32 @@ class Jugador {
     }
   }
 
-  method hablar() = "Rica gaseosa!"
+  method decir(texto) = texto
 }
 
 class Consumible {
   const energia
   const imagen
+  var position = game.center()
 
   method energia() = energia
   method image() = imagen
-
-  var property position = game.center()
-  method movete() {
+  method position() = position
+  
+  method moverse() {
     const x = 0.randomUpTo(game.width()).truncate(0)
     const y = 0.randomUpTo(game.height()).truncate(0)
     position = game.at(x,y)
+  }
+}
+
+object pelota {
+  method image() = "pelota.png"
+  var position = new MutablePosition(x=50, y=50)
+
+  method position() = position
+  method moverse(x, y) {
+    position = game.at(x, y)
   }
 }
 

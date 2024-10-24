@@ -1,8 +1,8 @@
-- [ ] Cambiar background por una mejor cancha.
-- [ ] Agregar más consumibles (objetos distintos).
-- [ ] Agregar la pelota.
-- [ ] Modelar interacción con la pelota.
-- [ ] Revisar colisión con golondrina provisoria.
+- [X] Cambiar background por una mejor cancha.
+- [X] Agregar más consumibles (objetos distintos).
+- [X] Agregar la pelota.
+- [ ] Modelar interacción con la pelota (que la patee en una direccion).
+- [ ] Revisar colisión con consumibles (que le suba la energia y que hable, y que el consumible desaparezca (y cómo vuelve a aparecer otro?)). 
 - [ ] Modelar colisión con jugador rival? (que lo empuje).
 - [ ] Agregar sonidos (de fondo, en colisiones, etc.).
 - [ ] Modelar mecánica de goles............y de fin de partida.

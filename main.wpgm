@@ -8,29 +8,15 @@ program FulbotGame {
     game.width(100)
     game.cellSize(10)
 
-//OBJETOS 
+//SONIDOS
 
-    const jugador1 = new Jugador( cansancio = 0, imagen = "brasilero.png")
-    const jugador2 = new Jugador( cansancio = 0, imagen = "argentino.png")
-	const gaseosa = new Consumible( energia = 30, imagen = "gaseosa.png")
+    const sonidoAmbiente = game.sound("sonidoAmbiente.mp3")
+    sonidoAmbiente.shouldLoop(true)
+    keyboard.m().onPressDo({sonidoAmbiente.volume(0)})
+    //keyboard.n().onPressDo({sonidoAmbiente.volume(50)}) //Por alguna razon da EvaluationError...
+    game.schedule(500, { sonidoAmbiente.play()} )
 
-//VISUALS
-
-    game.addVisual(jugador1)
-    game.addVisual(jugador2)
-    game.addVisual(gaseosa)
-
-//EVENTOS
-
-    game.whenCollideDo(gaseosa, { elemento => 
-		game.say(elemento,elemento.hablar())
-    	elemento.recuperarEnergia(gaseosa.energia())
-		}) //AÑADIR UN REMOVE PARA EL VISUAL.
-
-    //TENEMOS QUE HACER QUE CUANDO PASE CIERTA CANTIDAD DE TICKS EL ITEM REAPAREZCA, Y QUE CON LA COLISION DESAPAREZCA.
-    game.onTick(10000, "movimiento", { gaseosa.movete() })
-    game.onTick(1000, "movimiento", { jugador1.recuperarEnergia(10) })
-    game.onTick(1000, "movimiento", { jugador2.recuperarEnergia(10) })
+// TECLAS DE MOVIMIENTO
 
     keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
     keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })
@@ -42,5 +28,58 @@ program FulbotGame {
     keyboard.down().onPressDo({ jugador2.moverteAbajo(5) })
     keyboard.right().onPressDo({ jugador2.moverteDerecha(5) })
 
+//OBJETOS
+
+    const jugador1 = new Jugador( cansancio = 0, imagen = "argentino.png", position = new MutablePosition(x=50, y=10))
+    const jugador2 = new Jugador( cansancio = 0, imagen = "brasilero.png", position = new MutablePosition(x=50, y=90))
+
+	const gaseosa1 = new Consumible( energia = 30, imagen = "gaseosa.png")
+    const gaseosa2 = new Consumible( energia = 30, imagen = "gaseosa.png")
+    const comida = new Consumible( energia = 60, imagen = "food.png")
+    const banana1 = new Consumible( energia = 40, imagen = "bananas.png")
+    const banana2 = new Consumible( energia = 40, imagen = "bananas.png")
+    const agua1 = new Consumible( energia = 20, imagen = "agua.png")
+    const agua2 = new Consumible( energia = 20, imagen = "agua.png")
+
+// COLISIONES
+
+    //game.whenCollideDo(jugador1, { algo => game.say(jugador1,jugador1.decir("Epa!")) })
+    //game.whenCollideDo(jugador1, game.say(jugador1,jugador1.decir("Epa!")))
+
+    /*game.whenCollideDo(banana, { elemento =>
+        game.say(elemento,elemento.hablar("Gracias"))
+        elemento.recuperarEnergia(banana.energia())
+    }) //AÑADIR UN REMOVE PARA EL VISUAL. */
+ 
+ // EVENTOS PROGRAMADOS
+
+    game.schedule(100, {
+        game.addVisual(jugador1)
+        game.addVisual(jugador2)
+        game.addVisual(pelota)
+        game.addVisual(gaseosa1)
+        game.addVisual(gaseosa2)
+        game.addVisual(comida)
+        game.addVisual(banana1)
+        game.addVisual(banana2)
+        game.addVisual(agua1)
+        game.addVisual(agua2)
+        game.say(jugador1, jugador1.decir("Muchaaaaachoooooos"))
+        game.say(jugador2, jugador2.decir("Eu nao falo portugues"))
+    })
+
+// EVENTOS AUTOMATICOS
+    
+    //TENEMOS QUE HACER QUE CUANDO PASE CIERTA CANTIDAD DE TICKS EL ITEM REAPAREZCA, Y QUE CON LA COLISION DESAPAREZCA.
+    game.onTick(1000, "recupera energia", { jugador1.recuperarEnergia(10) })
+    game.onTick(1000, "recupera energia", { jugador2.recuperarEnergia(10) })
+    game.onTick(2000, "se mueve", { comida.moverse() })
+    game.onTick(5000, "se mueve", { banana1.moverse() })
+    game.onTick(5000, "se mueve", { banana2.moverse() })
+    game.onTick(8000, "se mueve", { gaseosa1.moverse() })
+    game.onTick(8000, "se mueve", { gaseosa2.moverse() })
+    game.onTick(10000, "se mueve", { agua1.moverse() })
+    game.onTick(10000, "se mueve", { agua2.moverse() })
+    
     game.start()
-} 
+}
