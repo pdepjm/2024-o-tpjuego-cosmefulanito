@@ -47,12 +47,12 @@ program FulbotGame {
     const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
     const arco1Y = 0 // Coordenada y de la portería 1
     const arco1Ancho = 10 // Ancho de la portería 1
-    const arco1Alto = 10 // Alto de la portería 1
+    const arco1Alto = 5 // Alto de la portería 1
 
     const arco2X = game.width() / 2 - 5 // Coordenada x de la portería 2 (derecha)
     const arco2Y = game.height() - 10 // Coordenada y de la portería 2
     const arco2Ancho = 10 // Ancho de la portería 2
-    const arco2Alto = 10 // Alto de la portería 2
+    const arco2Alto = 5 // Alto de la portería 2
 
     // Marcadores de goles
     var golesJugador1 = 0
