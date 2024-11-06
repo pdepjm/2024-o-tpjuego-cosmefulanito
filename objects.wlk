@@ -67,13 +67,20 @@ class Consumible {
 }
 
 object pelota {
-  method image() = "pelota.png"
   var position = new MutablePosition(x=50, y=50)
 
+  method image() = "pelota.png"
   method position() = position
   method moverse(x, y) {
     position = game.at(x, y)
   }
+}
+
+object rangoPelota {
+  var position = game.at(20, 20)
+
+  method image() = "rangoPelota.png"
+  method position() = position
 }
 
 

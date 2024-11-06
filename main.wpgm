@@ -4,9 +4,9 @@ import objects.*
 program FulbotGame {
     game.title("Fulbot")
     game.boardGround("pitch.jpg")
-    game.height(100)
-    game.width(100)
-    game.cellSize(10)
+    game.height(100) //tenemos un alto de 100 celdas (1000 pixeles).
+    game.width(100) //tenemos un ancho de 100 celdas (1000 pixeles).
+    game.cellSize(10) //tenemos celdas de 10x10 pixeles.
 
 //SONIDOS
 
@@ -14,7 +14,7 @@ program FulbotGame {
     sonidoAmbiente.shouldLoop(true)
     game.schedule(500, {
         sonidoAmbiente.play()
-        keyboard.m().onPressDo({sonidoAmbiente.volume(0)})
+        keyboard.m().onPressDo({sonidoAmbiente.volume(50)})
         //keyboard.n().onPressDo({sonidoAmbiente.volume(50)}) Por alguna razon da EvaluationError al presionar 'n'...
     })
 
@@ -43,15 +43,30 @@ program FulbotGame {
     const agua1 = new Consumible( energia = 20, imagen = "agua.png")
     const agua2 = new Consumible( energia = 20, imagen = "agua.png")
 
+    const arco1X = 0 // Coordenada x de la portería 1 (izquierda)
+    const arco1Y = 40 // Coordenada y de la portería 1
+    const arco1Ancho = 10 // Ancho de la portería 1
+    const arco1Alto = 20 // Alto de la portería 1
+
+    const arco2X = 40 - arco1Ancho // Coordenada x de la portería 2 (derecha)
+    const arco2Y = 40 // Coordenada y de la portería 2
+    const arco2Ancho = 10 // Ancho de la portería 2
+    const arco2Alto = 20 // Alto de la portería 2
+
+    // Marcadores de goles
+    var golesJugador1 = 0
+    var golesJugador2 = 0 // Comprobar si la pelota entra en el arco del jugador 1
+
 // COLISIONES
 
     //game.whenCollideDo(jugador1, { algo => game.say(jugador1,jugador1.decir("Epa!")) })
-    //game.whenCollideDo(jugador1, game.say(jugador1,jugador1.decir("Epa!")))
-
-    /*game.whenCollideDo(banana, { elemento =>
+    //game.whenCollideDo(rangoPelota, { algo => game.say(rangoPelota,"Epa!!!!!!!") })
+    /*
+    game.whenCollideDo(banana1, { elemento =>
         game.say(elemento,elemento.hablar("Gracias"))
-        elemento.recuperarEnergia(banana.energia())
-    }) //AÑADIR UN REMOVE PARA EL VISUAL. */
+        elemento.recuperarEnergia(banana1.energia())
+    })
+    */
  
  // EVENTOS PROGRAMADOS
 
@@ -82,6 +97,55 @@ program FulbotGame {
     game.onTick(8000, "se mueve", { gaseosa2.moverse() })
     game.onTick(10000, "se mueve", { agua1.moverse() })
     game.onTick(10000, "se mueve", { agua2.moverse() })
+    
+    game.onTick(100, "chequeo de colisiones", {
+    // Verificamos si el jugador1 está cerca de un consumible y lo recoge
+    if ((jugador1.position().x() - gaseosa1.position().x()).abs() < 5 and 
+        (jugador1.position().y() - gaseosa1.position().y()).abs() < 5) {
+        jugador1.recuperarEnergia(gaseosa1.energia())
+        jugador1.decir("RICA GASEOSA")
+        game.removeVisual(gaseosa1) // El consumible desaparece visualmente
+    }
+    if ((jugador1.position().x() - gaseosa2.position().x()).abs() < 5 and 
+        (jugador1.position().y() - gaseosa2.position().y()).abs() < 5) {
+        jugador1.recuperarEnergia(gaseosa2.energia())
+        jugador1.decir("RICA GASEOSA")
+        game.removeVisual(gaseosa2) // El consumible desaparece visualmente
+    }
+    if ((jugador1.position().x() - banana1.position().x()).abs() < 5 and 
+        (jugador1.position().y() - banana1.position().y()).abs() < 5) {
+        jugador1.recuperarEnergia(banana1.energia())
+        game.removeVisual(banana1) // El consumible desaparece visualmente
+    }
+
+    if ((jugador1.position().x() - pelota.position().x()).abs() < 5 and 
+        (jugador1.position().y() - pelota.position().y()) .abs() < 5) {
+        // Mover la pelota en la misma dirección que el jugador1
+        if (jugador1.position().x() < pelota.position().x()) {
+            pelota.moverse(pelota.position().x() - 5, pelota.position().y() - 5) // Mover a la izquierda
+        } else {
+            pelota.moverse(pelota.position().x() + 5, pelota.position().y() + 5) // Mover a la derecha
+        }
+    }
+    
+    if (pelota.position().x() >= arco1X && pelota.position().x() <= (arco1X + arco1Ancho) &&
+        pelota.position().y() >= arco1Y && pelota.position().y() <= (arco1Y + arco1Alto)) {
+
+        golesJugador2 += 1
+        game.say(jugador2, "¡Gol para el Jugador 2! Total: " + golesJugador2)
+        pelota.moverse(50, 50) // Reiniciar la posición de la pelota
+    }
+
+    // Comprobar si la pelota entra en el arco del jugador 2
+    if (pelota.position().x() >= arco2X && pelota.position().x() <= (arco2X + arco2Ancho) &&
+        pelota.position().y() >= arco2Y && pelota.position().y() <= (arco2Y + arco2Alto)) {
+
+        golesJugador1 += 1
+        game.say(jugador1, "¡Gol para el Jugador 1! Total: " + golesJugador1)
+        pelota.moverse(50, 50) // Reiniciar la posición de la pelota
+    }
+
+    })
     
     game.start()
 }

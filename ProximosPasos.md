@@ -1,10 +1,13 @@
 - [X] Cambiar background por una mejor cancha.
 - [X] Agregar más consumibles (objetos distintos).
 - [X] Agregar la pelota.
+- [X] MODELAR COLISION BASICA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 - [ ] Modelar interacción con la pelota (que la patee en una direccion).
 - [ ] Revisar colisión con consumibles (que el consumible desaparezca (y cómo vuelve a aparecer otro?)). 
 - [ ] Modelar colisión con jugador rival? (que lo empuje).
+- [ ] Definir bordes de la cancha.
 - [X] Agregar sonido de ambiente.
 - [ ] Agregar sonidos de colisiones.
 - [ ] Modelar mecánica de goles............y de fin de partida.
 - [ ] Agregar menú?
+- [ ] Agregar ¿tarjetas? para afectar al otro jugador (tarjeta roja lo deja quieto por ej.).

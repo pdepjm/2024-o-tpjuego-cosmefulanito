@@ -3,7 +3,7 @@ import main.*
 
 describe "group of tests for jugador" {
   
-  const jugador = new Jugador(cansancio = 0, imagen = "brasil2.png")
+  const jugador = new Jugador(cansancio = 0, imagen = "argentino.png")
   
   test "el jugador arranca con cansancio 0" {
     assert.equals(0, jugador.cansancio())
