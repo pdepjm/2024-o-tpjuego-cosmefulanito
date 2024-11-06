@@ -47,6 +47,13 @@ class Jugador {
     }
   }
 
+  method efectoAlReves(jugador) {
+  keyboard.s().onPressDo({ jugador.moverteArriba(5) })
+    keyboard.d().onPressDo({ jugador.moverteIzquierda(5) })
+    keyboard.w().onPressDo({ jugador.moverteAbajo(5) })
+    keyboard.a().onPressDo({ jugador.moverteDerecha(5) })
+}
+
   method decir(texto) = texto
 }
 

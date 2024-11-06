@@ -44,6 +44,8 @@ program FulbotGame {
     const agua1 = new Consumible( energia = 20, imagen = "agua.png")
     const agua2 = new Consumible( energia = 20, imagen = "agua.png")
 
+   const cerveza = new Consumible(energia = -20, imagen = "cerveza.png")
+
     const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
     const arco1Y = 0 // Coordenada y de la portería 1
     const arco1Ancho = 10 // Ancho de la portería 1
@@ -90,7 +92,7 @@ program FulbotGame {
     game.onTick(10000, "se mueve", { agua1.moverse() })
     game.onTick(10000, "se mueve", { agua2.moverse() })
 
-    
+ 
     
     game.onTick(100, "chequeo de colisiones", {
     // Verificamos si el jugador1 está cerca de un consumible y lo recoge
@@ -111,6 +113,20 @@ program FulbotGame {
         jugador1.recuperarEnergia(banana1.energia())
         game.removeVisual(banana1) // El consumible desaparece visualmente
     }
+
+    if ((jugador1.position().x() - cerveza.position().x()).abs() < 5 and 
+        (jugador1.position().y() - cerveza.position().y()).abs() < 5) {
+        jugador1.decir("ESTOY MAREADO")
+        game.schedule(10000, jugador1.efectoAlReves(jugador1))
+        game.removeVisual(cerveza)
+        jugador1.decir("NO TOMO MAS")
+        keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
+        keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })
+        keyboard.s().onPressDo({ jugador1.moverteAbajo(5) })
+        keyboard.d().onPressDo({ jugador1.moverteDerecha(5) })
+         // El consumible desaparece visualmente
+    }
+
     if ((jugador1.position().x() - pelota.position().x()).abs() < proximidad &&
         (jugador1.position().y() - pelota.position().y()).abs() < proximidad) {
 
