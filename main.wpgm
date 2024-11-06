@@ -32,6 +32,7 @@ program FulbotGame {
 
 //OBJETOS
 
+
     const jugador1 = new Jugador( cansancio = 0, imagen = "argentino.png", position = new MutablePosition(x=50, y=10))
     const jugador2 = new Jugador( cansancio = 0, imagen = "brasilero.png", position = new MutablePosition(x=50, y=90))
 
@@ -43,30 +44,21 @@ program FulbotGame {
     const agua1 = new Consumible( energia = 20, imagen = "agua.png")
     const agua2 = new Consumible( energia = 20, imagen = "agua.png")
 
-    const arco1X = 0 // Coordenada x de la portería 1 (izquierda)
-    const arco1Y = 40 // Coordenada y de la portería 1
+    const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
+    const arco1Y = 0 // Coordenada y de la portería 1
     const arco1Ancho = 10 // Ancho de la portería 1
-    const arco1Alto = 20 // Alto de la portería 1
+    const arco1Alto = 10 // Alto de la portería 1
 
-    const arco2X = 40 - arco1Ancho // Coordenada x de la portería 2 (derecha)
-    const arco2Y = 40 // Coordenada y de la portería 2
+    const arco2X = game.width() / 2 - 5 // Coordenada x de la portería 2 (derecha)
+    const arco2Y = game.height() - 10 // Coordenada y de la portería 2
     const arco2Ancho = 10 // Ancho de la portería 2
-    const arco2Alto = 20 // Alto de la portería 2
+    const arco2Alto = 10 // Alto de la portería 2
 
     // Marcadores de goles
     var golesJugador1 = 0
     var golesJugador2 = 0 // Comprobar si la pelota entra en el arco del jugador 1
+    const proximidad = 4
 
-// COLISIONES
-
-    //game.whenCollideDo(jugador1, { algo => game.say(jugador1,jugador1.decir("Epa!")) })
-    //game.whenCollideDo(rangoPelota, { algo => game.say(rangoPelota,"Epa!!!!!!!") })
-    /*
-    game.whenCollideDo(banana1, { elemento =>
-        game.say(elemento,elemento.hablar("Gracias"))
-        elemento.recuperarEnergia(banana1.energia())
-    })
-    */
  
  // EVENTOS PROGRAMADOS
 
@@ -97,6 +89,8 @@ program FulbotGame {
     game.onTick(8000, "se mueve", { gaseosa2.moverse() })
     game.onTick(10000, "se mueve", { agua1.moverse() })
     game.onTick(10000, "se mueve", { agua2.moverse() })
+
+    
     
     game.onTick(100, "chequeo de colisiones", {
     // Verificamos si el jugador1 está cerca de un consumible y lo recoge
@@ -117,14 +111,36 @@ program FulbotGame {
         jugador1.recuperarEnergia(banana1.energia())
         game.removeVisual(banana1) // El consumible desaparece visualmente
     }
+    if ((jugador1.position().x() - pelota.position().x()).abs() < proximidad &&
+        (jugador1.position().y() - pelota.position().y()).abs() < proximidad) {
 
-    if ((jugador1.position().x() - pelota.position().x()).abs() < 5 and 
-        (jugador1.position().y() - pelota.position().y()) .abs() < 5) {
-        // Mover la pelota en la misma dirección que el jugador1
+        // Empuja la pelota en la dirección de movimiento del jugador
         if (jugador1.position().x() < pelota.position().x()) {
-            pelota.moverse(pelota.position().x() - 5, pelota.position().y() - 5) // Mover a la izquierda
-        } else {
-            pelota.moverse(pelota.position().x() + 5, pelota.position().y() + 5) // Mover a la derecha
+            pelota.moverse(pelota.position().x() + 3, pelota.position().y())
+        } else if (jugador1.position().x() > pelota.position().x()) {
+            pelota.moverse(pelota.position().x() - 3, pelota.position().y())
+        }
+
+        if (jugador1.position().y() < pelota.position().y()) {
+            pelota.moverse(pelota.position().x(), pelota.position().y() + 3)
+        } else if (jugador1.position().y() > pelota.position().y()) {
+            pelota.moverse(pelota.position().x(), pelota.position().y() - 3)
+        }
+    }
+    if ((jugador2.position().x() - pelota.position().x()).abs() < proximidad &&
+        (jugador2.position().y() - pelota.position().y()).abs() < proximidad) {
+
+        // Empuja la pelota en la dirección de movimiento del jugador
+        if (jugador2.position().x() < pelota.position().x()) {
+            pelota.moverse(pelota.position().x() + 5, pelota.position().y())
+        } else if (jugador2.position().x() > pelota.position().x()) {
+            pelota.moverse(pelota.position().x() - 5, pelota.position().y())
+        }
+
+        if (jugador2.position().y() < pelota.position().y()) {
+            pelota.moverse(pelota.position().x(), pelota.position().y() + 5)
+        } else if (jugador2.position().y() > pelota.position().y()) {
+            pelota.moverse(pelota.position().x(), pelota.position().y() - 5)
         }
     }
     
