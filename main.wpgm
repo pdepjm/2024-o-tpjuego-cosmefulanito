@@ -193,11 +193,10 @@ program FulbotGame {
         game.schedule(10000, jugador1.efectoAlReves(jugador1))
         game.removeVisual(cerveza)
         jugador1.decir("NO TOMO MAS")
-        keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
-        keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })
-        keyboard.s().onPressDo({ jugador1.moverteAbajo(5) })
-        keyboard.d().onPressDo({ jugador1.moverteDerecha(5) })
-         // El consumible desaparece visualmente
+        keyboard.w().onPressDo({ jugador1.moverseArriba(5) })
+        keyboard.a().onPressDo({ jugador1.moverseIzquierda(5) })
+        keyboard.s().onPressDo({ jugador1.moverseAbajo(5) })
+        keyboard.d().onPressDo({ jugador1.moverseDerecha(5) })
     }
 
     // CON TARJETAS
