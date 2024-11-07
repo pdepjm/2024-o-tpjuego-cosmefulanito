@@ -1,0 +1,20 @@
+@startuml diagrama
+
+class Jugador {
+    cansancio
+    imagen
+    position
+    recuperarEnergia(energia)
+    cansarse(pos)
+    moverteArriba(pos)
+    moverteAbajo(pos)
+    moverteDerecha(pos)
+    moverteIzquierda(pos)
+    hablar()
+}
+class Consumible {
+    energia
+    imagen
+    movete()
+}
+@enduml
