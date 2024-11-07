@@ -1,11 +1,22 @@
 class Jugador {
-  var cansancio = 0
   const imagen 
   const position = game.center()
+  var cansancio = 0
 
-  method cansancio() = cansancio
   method image() = imagen
   method position() = position
+  method cansancio() = cansancio
+
+  method consumir(consumible) {
+    cansancio = 0.max(cansancio - consumible.energia())
+  }
+
+  method efectoAlReves(jugador) {
+  keyboard.s().onPressDo({ jugador.moverseArriba(5) })
+    keyboard.d().onPressDo({ jugador.moverseIzquierda(5) })
+    keyboard.w().onPressDo({ jugador.moverseAbajo(5) })
+    keyboard.a().onPressDo({ jugador.moverseDerecha(5) })
+  }
 
   method recuperarEnergia(energia) {
     if(cansancio - energia < 0){cansancio = 0}else{cansancio -= energia}
@@ -15,7 +26,7 @@ class Jugador {
     cansancio += pos
   }
 
-  method moverteArriba(pos) {
+  method moverseArriba(pos) {
     if (pos-(cansancio/100) <= 0){position.goUp(0)} 
     else {
     self.cansarse(pos) 
@@ -23,7 +34,7 @@ class Jugador {
     }
   }
 
-  method moverteAbajo(pos) {
+  method moverseAbajo(pos) {
     if (pos-(cansancio/100) <= 0){position.goDown(0)} 
     else {
     self.cansarse(pos) 
@@ -31,7 +42,7 @@ class Jugador {
     }
   }
 
-  method moverteDerecha(pos) {
+  method moverseDerecha(pos) {
     if (pos-(cansancio/100) <= 0){position.goRight(0)} 
     else {
     self.cansarse(pos) 
@@ -39,7 +50,7 @@ class Jugador {
     }
   }
 
-  method moverteIzquierda(pos) {
+  method moverseIzquierda(pos) {
     if (pos-(cansancio/100) <= 0){position.goLeft(0)} 
     else {
     self.cansarse(pos) 
@@ -47,50 +58,41 @@ class Jugador {
     }
   }
 
-  method efectoAlReves(jugador) {
-  keyboard.s().onPressDo({ jugador.moverteArriba(5) })
-    keyboard.d().onPressDo({ jugador.moverteIzquierda(5) })
-    keyboard.w().onPressDo({ jugador.moverteAbajo(5) })
-    keyboard.a().onPressDo({ jugador.moverteDerecha(5) })
-}
-
   method decir(texto) = texto
 }
 
-class Consumible {
-  const energia
+class Item {
   const imagen
-  var position = game.center()
+  const x = 0.randomUpTo(game.width()).truncate(0)
+  const y = 0.randomUpTo(game.height()).truncate(0)
+  var position = game.at(x, y)
 
-  method energia() = energia
   method image() = imagen
   method position() = position
-  
-  method moverse() {
-    const x = 0.randomUpTo(game.width()).truncate(0)
-    const y = 0.randomUpTo(game.height()).truncate(0)
-    position = game.at(x,y)
+  method moverse(nuevo_x, nuevo_y) {
+    position = game.at(nuevo_x, nuevo_y)
+  }
+  method moverseAlAzar() {
+    const x_random = 0.randomUpTo(game.width()).truncate(0)
+    const y_random = 0.randomUpTo(game.height()).truncate(0)
+    position = game.at(x_random,y_random)
   }
 }
 
-object pelota {
-  var position = new MutablePosition(x=50, y=50)
+class Consumible inherits Item {
+  const energia
+  method energia() = energia
+}
 
-  method image() = "pelota.png"
-  method position() = position
-  method moverse(x, y) {
-    position = game.at(x, y)
+class TarjetaRoja inherits Item {
+  method aplicar(jugador) {
+    jugador.cansarse(100) // cuál es la diferencia entre esto y hardcodearle el efecto desde main?
   }
 }
 
-object rangoPelota {
-  var position = game.at(20, 20)
-
-  method image() = "rangoPelota.png"
-  method position() = position
+class TarjetaAmarilla inherits Item {
+  method aplicar(jugador) {
+    jugador.cansarse(20)
+  }
 }
-
-
-
-
   

@@ -3,49 +3,68 @@ import objects.*
 
 program FulbotGame {
     game.title("Fulbot")
-    game.boardGround("pitch.jpg")
-    game.height(100) //tenemos un alto de 100 celdas (1000 pixeles).
-    game.width(100) //tenemos un ancho de 100 celdas (1000 pixeles).
-    game.cellSize(10) //tenemos celdas de 10x10 pixeles.
+    game.boardGround("pitchHorizontal.jpg")
+    game.height(100) // tenemos un alto de 100 celdas (1000 pixeles).
+    game.width(225) // tenemos un ancho de 225 celdas (2250 pixeles).
+    game.cellSize(10) // tenemos celdas de 10x10 pixeles.
 
-//SONIDOS
+// SONIDO DE FONDO
 
     const sonidoAmbiente = game.sound("sonidoAmbiente.mp3")
     sonidoAmbiente.shouldLoop(true)
-    game.schedule(500, {
-        sonidoAmbiente.play()
-        keyboard.m().onPressDo({sonidoAmbiente.volume(50)})
-        //keyboard.n().onPressDo({sonidoAmbiente.volume(50)}) Por alguna razon da EvaluationError al presionar 'n'...
+    game.schedule(500, {sonidoAmbiente.play()})
+
+    var sonidoAmbienteIsOn = true
+    keyboard.m().onPressDo({
+        if (sonidoAmbienteIsOn) {
+            sonidoAmbiente.volume(0)
+            sonidoAmbienteIsOn = false
+        } else {
+            sonidoAmbiente.volume(100)
+            sonidoAmbienteIsOn = true
+        }
     })
+    //keyboard.m().onPressDo({sonidoAmbiente.volume(0)})
 
 // TECLAS DE MOVIMIENTO
 
-    keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
-    keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })
-    keyboard.s().onPressDo({ jugador1.moverteAbajo(5) })
-    keyboard.d().onPressDo({ jugador1.moverteDerecha(5) })
+    keyboard.w().onPressDo({ jugador1.moverseArriba(5) })
+    keyboard.a().onPressDo({ jugador1.moverseIzquierda(5) })
+    keyboard.s().onPressDo({ jugador1.moverseAbajo(5) })
+    keyboard.d().onPressDo({ jugador1.moverseDerecha(5) })
 
-    keyboard.up().onPressDo({ jugador2.moverteArriba(5) })
-    keyboard.left().onPressDo({ jugador2.moverteIzquierda(5) })
-    keyboard.down().onPressDo({ jugador2.moverteAbajo(5) })
-    keyboard.right().onPressDo({ jugador2.moverteDerecha(5) })
+    keyboard.up().onPressDo({ jugador2.moverseArriba(5) })
+    keyboard.left().onPressDo({ jugador2.moverseIzquierda(5) })
+    keyboard.down().onPressDo({ jugador2.moverseAbajo(5) })
+    keyboard.right().onPressDo({ jugador2.moverseDerecha(5) })
 
-//OBJETOS
+// OBJETOS Y REFERENCIAS
 
+    // Jugadores
+    const jugador1 = new Jugador( cansancio = 0, imagen = "argentino.png", position = new MutablePosition(x=125, y=50))
+    const jugador2 = new Jugador( cansancio = 0, imagen = "brasilero.png", position = new MutablePosition(x=95, y=50))
 
-    const jugador1 = new Jugador( cansancio = 0, imagen = "argentino.png", position = new MutablePosition(x=50, y=10))
-    const jugador2 = new Jugador( cansancio = 0, imagen = "brasilero.png", position = new MutablePosition(x=50, y=90))
+    // Items
+    const pelota = new Item( imagen = "pelota.png", position = game.at(110, 50))
+    const bananaPeel1 = new Item( imagen = "bananaPeel.png")
+    const bananaPeel2 = new Item( imagen = "bananaPeel.png")
+    const bananaPeel3 = new Item( imagen = "bananaPeel.png")
 
-	const gaseosa1 = new Consumible( energia = 30, imagen = "gaseosa.png")
-    const gaseosa2 = new Consumible( energia = 30, imagen = "gaseosa.png")
-    const comida = new Consumible( energia = 60, imagen = "food.png")
+    // Tarjetas
+    const tarjetaAmarilla = new TarjetaAmarilla( imagen = "yellowCard.png")
+    const tarjetaRoja = new TarjetaRoja( imagen = "redCard.png")
+
+    // Consumibles
+	const gaseosa1 = new Consumible( energia = 30, imagen = "coke2.png")
+    const gaseosa2 = new Consumible( energia = 30, imagen = "coke2.png")
+    const comida = new Consumible( energia = 80, imagen = "food.png")
     const banana1 = new Consumible( energia = 40, imagen = "bananas.png")
     const banana2 = new Consumible( energia = 40, imagen = "bananas.png")
     const agua1 = new Consumible( energia = 20, imagen = "agua.png")
     const agua2 = new Consumible( energia = 20, imagen = "agua.png")
+    const cerveza = new Consumible(energia = -20, imagen = "cerveza.png")
 
-   const cerveza = new Consumible(energia = -20, imagen = "cerveza.png")
-
+    // Arcos
     const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
     const arco1Y = 0 // Coordenada y de la portería 1
     const arco1Ancho = 10 // Ancho de la portería 1
@@ -61,13 +80,17 @@ program FulbotGame {
     var golesJugador2 = 0 // Comprobar si la pelota entra en el arco del jugador 1
     const proximidad = 4
 
- 
  // EVENTOS PROGRAMADOS
 
     game.schedule(100, {
         game.addVisual(jugador1)
         game.addVisual(jugador2)
         game.addVisual(pelota)
+        game.addVisual(bananaPeel1)
+        game.addVisual(bananaPeel2)
+        game.addVisual(bananaPeel3)
+        game.addVisual(tarjetaAmarilla)
+        game.addVisual(tarjetaRoja)
         game.addVisual(gaseosa1)
         game.addVisual(gaseosa2)
         game.addVisual(comida)
@@ -75,45 +98,95 @@ program FulbotGame {
         game.addVisual(banana2)
         game.addVisual(agua1)
         game.addVisual(agua2)
+        game.addVisual(cerveza)
         game.say(jugador1, jugador1.decir("Muchaaaaachoooooos"))
         game.say(jugador2, jugador2.decir("Eu nao falo portugues"))
     })
 
 // EVENTOS AUTOMATICOS
-    
-    //TENEMOS QUE HACER QUE CUANDO PASE CIERTA CANTIDAD DE TICKS EL ITEM REAPAREZCA, Y QUE CON LA COLISION DESAPAREZCA.
-    game.onTick(1000, "recupera energia", { jugador1.recuperarEnergia(10) })
-    game.onTick(1000, "recupera energia", { jugador2.recuperarEnergia(10) })
-    game.onTick(2000, "se mueve", { comida.moverse() })
-    game.onTick(5000, "se mueve", { banana1.moverse() })
-    game.onTick(5000, "se mueve", { banana2.moverse() })
-    game.onTick(8000, "se mueve", { gaseosa1.moverse() })
-    game.onTick(8000, "se mueve", { gaseosa2.moverse() })
-    game.onTick(10000, "se mueve", { agua1.moverse() })
-    game.onTick(10000, "se mueve", { agua2.moverse() })
 
- 
-    
+    game.onTick(1000, "recupera energia", { jugador1.recuperarEnergia(20) })
+    game.onTick(1000, "recupera energia", { jugador2.recuperarEnergia(20) })
+    game.onTick(2000, "se mueve", { tarjetaRoja.moverseAlAzar() })
+    game.onTick(5000, "se mueve", { tarjetaAmarilla.moverseAlAzar() })
+    game.onTick(8000, "se mueve", { bananaPeel1.moverseAlAzar() })
+    game.onTick(8000, "se mueve", { bananaPeel2.moverseAlAzar() })
+    game.onTick(8000, "se mueve", { bananaPeel3.moverseAlAzar() })
+    game.onTick(5000, "se mueve", { comida.moverseAlAzar() })
+    game.onTick(5000, "se mueve", { banana1.moverseAlAzar() })
+    game.onTick(5000, "se mueve", { banana2.moverseAlAzar() })
+    game.onTick(8000, "se mueve", { gaseosa1.moverseAlAzar() })
+    game.onTick(8000, "se mueve", { gaseosa2.moverseAlAzar() })
+    game.onTick(10000, "se mueve", { agua1.moverseAlAzar() })
+    game.onTick(10000, "se mueve", { agua2.moverseAlAzar() })
+
+// COLISIONES
+
     game.onTick(100, "chequeo de colisiones", {
-    // Verificamos si el jugador1 está cerca de un consumible y lo recoge
+    // CON CONSUMIBLES
     if ((jugador1.position().x() - gaseosa1.position().x()).abs() < 5 and 
         (jugador1.position().y() - gaseosa1.position().y()).abs() < 5) {
-        jugador1.recuperarEnergia(gaseosa1.energia())
-        jugador1.decir("RICA GASEOSA")
-        game.removeVisual(gaseosa1) // El consumible desaparece visualmente
+        jugador1.consumir(gaseosa1)
+        game.say(jugador1, jugador1.decir("Rica gaseosa!"))
+        game.removeVisual(gaseosa1)
     }
     if ((jugador1.position().x() - gaseosa2.position().x()).abs() < 5 and 
         (jugador1.position().y() - gaseosa2.position().y()).abs() < 5) {
-        jugador1.recuperarEnergia(gaseosa2.energia())
-        jugador1.decir("RICA GASEOSA")
-        game.removeVisual(gaseosa2) // El consumible desaparece visualmente
+        jugador1.consumir(gaseosa2)
+        game.say(jugador1, jugador1.decir("Rica gaseosa!"))
+        game.removeVisual(gaseosa2)
+    }
+    if ((jugador1.position().x() - agua1.position().x()).abs() < 5 and 
+        (jugador1.position().y() - agua1.position().y()).abs() < 5) {
+        jugador1.consumir(agua1)
+        game.say(jugador1, jugador1.decir("Rica agua!"))
+        game.removeVisual(agua1)
+    }
+    if ((jugador1.position().x() - agua2.position().x()).abs() < 5 and 
+        (jugador1.position().y() - agua2.position().y()).abs() < 5) {
+        jugador1.consumir(agua2)
+        game.say(jugador1, jugador1.decir("Rica agua!"))
+        game.removeVisual(agua2)
     }
     if ((jugador1.position().x() - banana1.position().x()).abs() < 5 and 
         (jugador1.position().y() - banana1.position().y()).abs() < 5) {
-        jugador1.recuperarEnergia(banana1.energia())
-        game.removeVisual(banana1) // El consumible desaparece visualmente
+        jugador1.consumir(banana1)
+        game.say(jugador1, jugador1.decir("Gracias por la fruta"))
+        game.removeVisual(banana1)
     }
-
+    if ((jugador1.position().x() - banana2.position().x()).abs() < 5 and 
+        (jugador1.position().y() - banana2.position().y()).abs() < 5) {
+        jugador1.consumir(banana2)
+        game.say(jugador1, jugador1.decir("Gracias por la fruta"))
+        game.removeVisual(banana2)
+    }
+    if ((jugador1.position().x() - comida.position().x()).abs() < 5 and 
+        (jugador1.position().y() - comida.position().y()).abs() < 5) {
+        jugador1.consumir(comida)
+        game.say(jugador1, jugador1.decir("Gracias por la comida"))
+        game.removeVisual(comida)
+    }
+    if ((jugador1.position().x() - bananaPeel1.position().x()).abs() < 5 and 
+        (jugador1.position().y() - bananaPeel1.position().y()).abs() < 5) {
+        jugador1.moverseArriba(5)
+        jugador1.moverseDerecha(10)
+        game.say(jugador1, jugador1.decir("Noooooooo"))
+        game.removeVisual(bananaPeel1)
+    }
+    if ((jugador1.position().x() - bananaPeel2.position().x()).abs() < 5 and 
+        (jugador1.position().y() - bananaPeel2.position().y()).abs() < 5) {
+        jugador1.moverseArriba(5)
+        jugador1.moverseDerecha(10)
+        game.say(jugador1, jugador1.decir("Noooooooo"))
+        game.removeVisual(bananaPeel2)
+    }
+    if ((jugador1.position().x() - bananaPeel3.position().x()).abs() < 5 and 
+        (jugador1.position().y() - bananaPeel3.position().y()).abs() < 5) {
+        jugador1.moverseArriba(5)
+        jugador1.moverseDerecha(10)
+        game.say(jugador1, jugador1.decir("Noooooooo"))
+        game.removeVisual(bananaPeel3)
+    }
     if ((jugador1.position().x() - cerveza.position().x()).abs() < 5 and 
         (jugador1.position().y() - cerveza.position().y()).abs() < 5) {
         jugador1.decir("ESTOY MAREADO")
@@ -127,16 +200,41 @@ program FulbotGame {
          // El consumible desaparece visualmente
     }
 
+    // CON TARJETAS
+    if ((jugador1.position().x() - tarjetaAmarilla.position().x()).abs() < 5 and 
+        (jugador1.position().y() - tarjetaAmarilla.position().y()).abs() < 5) {
+        tarjetaAmarilla.aplicar(jugador2)
+        game.say(jugador1, jugador1.decir("Toma amarilla"))
+        game.removeVisual(tarjetaAmarilla)
+    }
+    if ((jugador1.position().x() - tarjetaRoja.position().x()).abs() < 5 and 
+        (jugador1.position().y() - tarjetaRoja.position().y()).abs() < 5) {
+        tarjetaRoja.aplicar(jugador2)
+        game.say(jugador1, jugador1.decir("Toma roja"))
+        game.removeVisual(tarjetaRoja)
+    }
+    if ((jugador2.position().x() - tarjetaAmarilla.position().x()).abs() < 5 and 
+        (jugador2.position().y() - tarjetaAmarilla.position().y()).abs() < 5) {
+        tarjetaAmarilla.aplicar(jugador1)
+        game.say(jugador2, jugador2.decir("Amarelo para voce"))
+        game.removeVisual(tarjetaAmarilla)
+    }
+    if ((jugador2.position().x() - tarjetaRoja.position().x()).abs() < 5 and 
+        (jugador2.position().y() - tarjetaRoja.position().y()).abs() < 5) {
+        tarjetaRoja.aplicar(jugador1)
+        game.say(jugador2, jugador2.decir("Vermelho para voce"))
+        game.removeVisual(tarjetaRoja)
+    }
+
+    // CON PELOTA
     if ((jugador1.position().x() - pelota.position().x()).abs() < proximidad &&
         (jugador1.position().y() - pelota.position().y()).abs() < proximidad) {
-
         // Empuja la pelota en la dirección de movimiento del jugador
         if (jugador1.position().x() < pelota.position().x()) {
             pelota.moverse(pelota.position().x() + 3, pelota.position().y())
         } else if (jugador1.position().x() > pelota.position().x()) {
             pelota.moverse(pelota.position().x() - 3, pelota.position().y())
         }
-
         if (jugador1.position().y() < pelota.position().y()) {
             pelota.moverse(pelota.position().x(), pelota.position().y() + 3)
         } else if (jugador1.position().y() > pelota.position().y()) {
@@ -145,38 +243,30 @@ program FulbotGame {
     }
     if ((jugador2.position().x() - pelota.position().x()).abs() < proximidad &&
         (jugador2.position().y() - pelota.position().y()).abs() < proximidad) {
-
         // Empuja la pelota en la dirección de movimiento del jugador
         if (jugador2.position().x() < pelota.position().x()) {
             pelota.moverse(pelota.position().x() + 5, pelota.position().y())
         } else if (jugador2.position().x() > pelota.position().x()) {
             pelota.moverse(pelota.position().x() - 5, pelota.position().y())
         }
-
         if (jugador2.position().y() < pelota.position().y()) {
             pelota.moverse(pelota.position().x(), pelota.position().y() + 5)
         } else if (jugador2.position().y() > pelota.position().y()) {
             pelota.moverse(pelota.position().x(), pelota.position().y() - 5)
         }
     }
-    
     if (pelota.position().x() >= arco1X && pelota.position().x() <= (arco1X + arco1Ancho) &&
         pelota.position().y() >= arco1Y && pelota.position().y() <= (arco1Y + arco1Alto)) {
-
         golesJugador2 += 1
         game.say(jugador2, "¡Gol para el Jugador 2! Total: " + golesJugador2)
-        pelota.moverse(50, 50) // Reiniciar la posición de la pelota
+        pelota.moverse(110, 50) // Reiniciar la posición de la pelota
     }
-
-    // Comprobar si la pelota entra en el arco del jugador 2
     if (pelota.position().x() >= arco2X && pelota.position().x() <= (arco2X + arco2Ancho) &&
         pelota.position().y() >= arco2Y && pelota.position().y() <= (arco2Y + arco2Alto)) {
-
         golesJugador1 += 1
         game.say(jugador1, "¡Gol para el Jugador 1! Total: " + golesJugador1)
-        pelota.moverse(50, 50) // Reiniciar la posición de la pelota
+        pelota.moverse(110, 50) // Reiniciar la posición de la pelota
     }
-
     })
     
     game.start()
