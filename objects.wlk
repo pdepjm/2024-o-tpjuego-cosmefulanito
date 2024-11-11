@@ -8,7 +8,16 @@ class Jugador {
   method position() = position
   method cansancio() = cansancio
   method goles() = goles
+  method consumir(consumible) {
+    cansancio = 0.max(cansancio - consumible.energia())
+  }
 
+  method efectoAlReves(jugador) {
+  keyboard.s().onPressDo({ jugador.moverseArriba(5) })
+    keyboard.d().onPressDo({ jugador.moverseIzquierda(5) })
+    keyboard.w().onPressDo({ jugador.moverseAbajo(5) })
+    keyboard.a().onPressDo({ jugador.moverseDerecha(5) })
+  }
 
   method recuperarEnergia(energia) {
     cansancio = 0.max(cansancio - energia)cansancio = 0.max(cansancio - energia)
