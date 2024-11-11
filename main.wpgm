@@ -45,24 +45,23 @@ program FulbotGame {
     const jugador2 = new Jugador( cansancio = 0, imagen = "brasilero.png", position = new MutablePosition(x=95, y=50))
 
     // Items
-    const pelota = new Item( imagen = "pelota.png", position = game.at(110, 50))
-    const bananaPeel1 = new Item( imagen = "bananaPeel.png")
-    const bananaPeel2 = new Item( imagen = "bananaPeel.png")
-    const bananaPeel3 = new Item( imagen = "bananaPeel.png")
+    const pelota = new Item( imagen = "pelota.png", position = game.at(110, 50), frase = "")
+    const bananaPeel1 = new CascaraBanana( imagen = "bananaPeel.png", frase = "Noooooooo")
+    const bananaPeel2 = new CascaraBanana( imagen = "bananaPeel.png", frase = "Noooooooo")
+    const bananaPeel3 = new CascaraBanana( imagen = "bananaPeel.png", frase = "Noooooooo")
 
     // Tarjetas
-    const tarjetaAmarilla = new TarjetaAmarilla( imagen = "yellowCard.png")
-    const tarjetaRoja = new TarjetaRoja( imagen = "redCard.png")
+    const tarjetaAmarilla = new Tarjetas( imagen = "yellowCard.png", frase = "Toma amarilla", cantidad = 20)
+    const tarjetaRoja = new Tarjetas( imagen = "redCard.png", frase = "Toma roja", cantidad = 100)
 
     // Consumibles
-	const gaseosa1 = new Consumible( energia = 30, imagen = "coke2.png")
-    const gaseosa2 = new Consumible( energia = 30, imagen = "coke2.png")
-    const comida = new Consumible( energia = 80, imagen = "food.png")
-    const banana1 = new Consumible( energia = 40, imagen = "bananas.png")
-    const banana2 = new Consumible( energia = 40, imagen = "bananas.png")
-    const agua1 = new Consumible( energia = 20, imagen = "agua.png")
-    const agua2 = new Consumible( energia = 20, imagen = "agua.png")
-    const cerveza = new Consumible(energia = -20, imagen = "cerveza.png")
+	const gaseosa1 = new Consumible( energia = 30, imagen = "coke2.png", frase = "rica gaseosa")
+    const gaseosa2 = new Consumible( energia = 30, imagen = "coke2.png", frase = "rica gaseosa")
+    const comida = new Consumible( energia = 80, imagen = "food.png", frase = "Gracias por la comida")
+    const banana1 = new Consumible( energia = 40, imagen = "bananas.png", frase = "Gracias por la fruta")
+    const banana2 = new Consumible( energia = 40, imagen = "bananas.png", frase = "Gracias por la fruta")
+    const agua1 = new Consumible( energia = 20, imagen = "agua.png", frase = "Rica agua!")
+    const agua2 = new Consumible( energia = 20, imagen = "agua.png", frase = "Rica agua!")
 
     // Arcos
     const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
@@ -98,7 +97,6 @@ program FulbotGame {
         game.addVisual(banana2)
         game.addVisual(agua1)
         game.addVisual(agua2)
-        game.addVisual(cerveza)
         game.say(jugador1, jugador1.decir("Muchaaaaachoooooos"))
         game.say(jugador2, jugador2.decir("Eu nao falo portugues"))
     })
@@ -121,9 +119,10 @@ program FulbotGame {
     game.onTick(10000, "se mueve", { agua2.moverseAlAzar() })
 
 // COLISIONES
-
+/*
     game.onTick(100, "chequeo de colisiones", {
     // CON CONSUMIBLES
+    /*
     if ((jugador1.position().x() - gaseosa1.position().x()).abs() < 5 and 
         (jugador1.position().y() - gaseosa1.position().y()).abs() < 5) {
         jugador1.consumir(gaseosa1)
@@ -187,17 +186,6 @@ program FulbotGame {
         game.say(jugador1, jugador1.decir("Noooooooo"))
         game.removeVisual(bananaPeel3)
     }
-    if ((jugador1.position().x() - cerveza.position().x()).abs() < 5 and 
-        (jugador1.position().y() - cerveza.position().y()).abs() < 5) {
-        jugador1.decir("ESTOY MAREADO")
-        game.schedule(10000, jugador1.efectoAlReves(jugador1))
-        game.removeVisual(cerveza)
-        jugador1.decir("NO TOMO MAS")
-        keyboard.w().onPressDo({ jugador1.moverseArriba(5) })
-        keyboard.a().onPressDo({ jugador1.moverseIzquierda(5) })
-        keyboard.s().onPressDo({ jugador1.moverseAbajo(5) })
-        keyboard.d().onPressDo({ jugador1.moverseDerecha(5) })
-    }
 
     // CON TARJETAS
     if ((jugador1.position().x() - tarjetaAmarilla.position().x()).abs() < 5 and 
@@ -253,7 +241,8 @@ program FulbotGame {
         } else if (jugador2.position().y() > pelota.position().y()) {
             pelota.moverse(pelota.position().x(), pelota.position().y() - 5)
         }
-    }
+    }*/
+    /*
     if (pelota.position().x() >= arco1X && pelota.position().x() <= (arco1X + arco1Ancho) &&
         pelota.position().y() >= arco1Y && pelota.position().y() <= (arco1Y + arco1Alto)) {
         golesJugador2 += 1
@@ -266,7 +255,7 @@ program FulbotGame {
         game.say(jugador1, "¡Gol para el Jugador 1! Total: " + golesJugador1)
         pelota.moverse(110, 50) // Reiniciar la posición de la pelota
     }
-    })
+    })*/
     
     game.start()
 }
