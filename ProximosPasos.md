@@ -10,4 +10,8 @@
 - [ ] Agregar sonidos de colisiones.
 - [ ] Modelar mecánica de goles............y de fin de partida.
 - [ ] Agregar menú?
-- [ ] Agregar ¿tarjetas? para afectar al otro jugador (tarjeta roja lo deja quieto por ej.).
+- [X] Agregar ¿tarjetas? para afectar al otro jugador (tarjeta roja lo deja quieto por ej.).
+- DELEGAR Y MODULARIZAR CON OBJETOS Y METODOS, ELIMINAR ALGORITMIA PROCEDURAL DE C.
+- EN COLISION, NO PREGUNTAR SI CHOCA CON BANANA. USAR MENSAJES: CUANDO ALGO CHOCA CON UNA BANANA, MANDARLE UN MENSAJE
+  A ESE ALGO (MOVETE).
+- SOBRE EL REMOVE VISUAL: EL OBJETO SIGUE ESTANDO PORQUE ESTÁ LA REFERENCIA (CONSTANTE). HAY QUE MODIFICAR ESO.

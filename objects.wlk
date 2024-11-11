@@ -12,7 +12,7 @@ class Jugador {
   }
 
   method efectoAlReves(jugador) {
-  keyboard.s().onPressDo({ jugador.moverseArriba(5) })
+    keyboard.s().onPressDo({ jugador.moverseArriba(5) })
     keyboard.d().onPressDo({ jugador.moverseIzquierda(5) })
     keyboard.w().onPressDo({ jugador.moverseAbajo(5) })
     keyboard.a().onPressDo({ jugador.moverseDerecha(5) })

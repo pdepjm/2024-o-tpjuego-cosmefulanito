@@ -41,7 +41,7 @@ program FulbotGame {
 // OBJETOS Y REFERENCIAS
 
     // Jugadores
-    const jugador1 = new Jugador( cansancio = 0, imagen = "argentino.png", position = new MutablePosition(x=125, y=50))
+    const jugador1 = new Jugador( cansancio = 0, imagen = "argentino.png", position = new MutablePosition(x=122, y=50))
     const jugador2 = new Jugador( cansancio = 0, imagen = "brasilero.png", position = new MutablePosition(x=95, y=50))
 
     // Items
@@ -49,6 +49,10 @@ program FulbotGame {
     const bananaPeel1 = new Item( imagen = "bananaPeel.png")
     const bananaPeel2 = new Item( imagen = "bananaPeel.png")
     const bananaPeel3 = new Item( imagen = "bananaPeel.png")
+    const cono1 = new Item( imagen = "cono.png", position = game.at(10, 56))
+    const cono2 = new Item( imagen = "cono.png", position = game.at(10, 42))
+    const cono3 = new Item( imagen = "cono.png", position = game.at(208, 56))
+    const cono4 = new Item( imagen = "cono.png", position = game.at(208, 42))
 
     // Tarjetas
     const tarjetaAmarilla = new TarjetaAmarilla( imagen = "yellowCard.png")
@@ -65,20 +69,20 @@ program FulbotGame {
     const cerveza = new Consumible(energia = -20, imagen = "cerveza.png")
 
     // Arcos
-    const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
-    const arco1Y = 0 // Coordenada y de la portería 1
-    const arco1Ancho = 10 // Ancho de la portería 1
-    const arco1Alto = 5 // Alto de la portería 1
+    const arco1X = 208 // Coordenada x de la portería 1 (izquierda)
+    const arco1Y = 50 // Coordenada y de la portería 1
+    const arco1Ancho = 5 // Ancho de la portería 1
+    const arco1Alto = 10 // Alto de la portería 1
 
-    const arco2X = game.width() / 2 - 5 // Coordenada x de la portería 2 (derecha)
-    const arco2Y = game.height() - 10 // Coordenada y de la portería 2
-    const arco2Ancho = 10 // Ancho de la portería 2
-    const arco2Alto = 5 // Alto de la portería 2
+    const arco2X = 10 // Coordenada x de la portería 2 (derecha)
+    const arco2Y = 50 // Coordenada y de la portería 2
+    const arco2Ancho = 5 // Ancho de la portería 2
+    const arco2Alto = 10 // Alto de la portería 2
 
     // Marcadores de goles
     var golesJugador1 = 0
     var golesJugador2 = 0 // Comprobar si la pelota entra en el arco del jugador 1
-    const proximidad = 4
+    const proximidad = 5
 
  // EVENTOS PROGRAMADOS
 
@@ -99,6 +103,10 @@ program FulbotGame {
         game.addVisual(agua1)
         game.addVisual(agua2)
         game.addVisual(cerveza)
+        game.addVisual(cono1)
+        game.addVisual(cono2)
+        game.addVisual(cono3)
+        game.addVisual(cono4)
         game.say(jugador1, jugador1.decir("Muchaaaaachoooooos"))
         game.say(jugador2, jugador2.decir("Eu nao falo portugues"))
     })
@@ -109,9 +117,9 @@ program FulbotGame {
     game.onTick(1000, "recupera energia", { jugador2.recuperarEnergia(20) })
     game.onTick(2000, "se mueve", { tarjetaRoja.moverseAlAzar() })
     game.onTick(5000, "se mueve", { tarjetaAmarilla.moverseAlAzar() })
-    game.onTick(8000, "se mueve", { bananaPeel1.moverseAlAzar() })
-    game.onTick(8000, "se mueve", { bananaPeel2.moverseAlAzar() })
-    game.onTick(8000, "se mueve", { bananaPeel3.moverseAlAzar() })
+    //game.onTick(8000, "se mueve", { bananaPeel1.moverseAlAzar() })
+    //game.onTick(8000, "se mueve", { bananaPeel2.moverseAlAzar() })
+    //game.onTick(8000, "se mueve", { bananaPeel3.moverseAlAzar() })
     game.onTick(5000, "se mueve", { comida.moverseAlAzar() })
     game.onTick(5000, "se mueve", { banana1.moverseAlAzar() })
     game.onTick(5000, "se mueve", { banana2.moverseAlAzar() })
@@ -122,6 +130,12 @@ program FulbotGame {
 
 // COLISIONES
 
+    /*
+    game.whenCollideDo(jugador2, {
+    game.say(jugador2,jugador2.decir("Me choque con algo!!"))
+    })
+    */
+    
     game.onTick(100, "chequeo de colisiones", {
     // CON CONSUMIBLES
     if ((jugador1.position().x() - gaseosa1.position().x()).abs() < 5 and 
@@ -171,6 +185,7 @@ program FulbotGame {
         jugador1.moverseArriba(5)
         jugador1.moverseDerecha(10)
         game.say(jugador1, jugador1.decir("Noooooooo"))
+        //bananaPeel1.moverse(0,0)
         game.removeVisual(bananaPeel1)
     }
     if ((jugador1.position().x() - bananaPeel2.position().x()).abs() < 5 and 
@@ -178,6 +193,7 @@ program FulbotGame {
         jugador1.moverseArriba(5)
         jugador1.moverseDerecha(10)
         game.say(jugador1, jugador1.decir("Noooooooo"))
+        //bananaPeel2.moverse(0,0)
         game.removeVisual(bananaPeel2)
     }
     if ((jugador1.position().x() - bananaPeel3.position().x()).abs() < 5 and 
@@ -185,6 +201,7 @@ program FulbotGame {
         jugador1.moverseArriba(5)
         jugador1.moverseDerecha(10)
         game.say(jugador1, jugador1.decir("Noooooooo"))
+        //bananaPeel3.moverse(0,0)
         game.removeVisual(bananaPeel3)
     }
     if ((jugador1.position().x() - cerveza.position().x()).abs() < 5 and 
@@ -193,10 +210,10 @@ program FulbotGame {
         game.schedule(10000, jugador1.efectoAlReves(jugador1))
         game.removeVisual(cerveza)
         jugador1.decir("NO TOMO MAS")
-        keyboard.w().onPressDo({ jugador1.moverseArriba(5) })
-        keyboard.a().onPressDo({ jugador1.moverseIzquierda(5) })
-        keyboard.s().onPressDo({ jugador1.moverseAbajo(5) })
-        keyboard.d().onPressDo({ jugador1.moverseDerecha(5) })
+        keyboard.w().onPressDo({ jugador1.moverteArriba(5) })
+        keyboard.a().onPressDo({ jugador1.moverteIzquierda(5) })
+        keyboard.s().onPressDo({ jugador1.moverteAbajo(5) })
+        keyboard.d().onPressDo({ jugador1.moverteDerecha(5) })
     }
 
     // CON TARJETAS
@@ -225,19 +242,19 @@ program FulbotGame {
         game.removeVisual(tarjetaRoja)
     }
 
-    // CON PELOTA
+    // CON PELOTA: DRIBBLING
     if ((jugador1.position().x() - pelota.position().x()).abs() < proximidad &&
         (jugador1.position().y() - pelota.position().y()).abs() < proximidad) {
         // Empuja la pelota en la dirección de movimiento del jugador
         if (jugador1.position().x() < pelota.position().x()) {
-            pelota.moverse(pelota.position().x() + 3, pelota.position().y())
+            pelota.moverse(pelota.position().x() + 5, pelota.position().y())
         } else if (jugador1.position().x() > pelota.position().x()) {
-            pelota.moverse(pelota.position().x() - 3, pelota.position().y())
+            pelota.moverse(pelota.position().x() - 5, pelota.position().y())
         }
         if (jugador1.position().y() < pelota.position().y()) {
-            pelota.moverse(pelota.position().x(), pelota.position().y() + 3)
+            pelota.moverse(pelota.position().x(), pelota.position().y() + 5)
         } else if (jugador1.position().y() > pelota.position().y()) {
-            pelota.moverse(pelota.position().x(), pelota.position().y() - 3)
+            pelota.moverse(pelota.position().x(), pelota.position().y() - 5)
         }
     }
     if ((jugador2.position().x() - pelota.position().x()).abs() < proximidad &&
@@ -254,6 +271,7 @@ program FulbotGame {
             pelota.moverse(pelota.position().x(), pelota.position().y() - 5)
         }
     }
+    // CON PELOTA: GOLES
     if (pelota.position().x() >= arco1X && pelota.position().x() <= (arco1X + arco1Ancho) &&
         pelota.position().y() >= arco1Y && pelota.position().y() <= (arco1Y + arco1Alto)) {
         golesJugador2 += 1
