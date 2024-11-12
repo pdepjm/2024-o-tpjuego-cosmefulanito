@@ -1,169 +1,251 @@
 class Jugador {
-  var goles = 0
-  const imagen 
-  const position = game.center()
-  var cansancio = 0
+  const property image
+  var property x = 105
+  var property y = 50
+  var property position = game.at(x, y)
+  var property ultimaDireccion = "ninguna"
+  var property energia = 100
+  var property potencia = 0
+  const rangoProximidad = 4
 
-  method image() = imagen
-  method position() = position
-  method cansancio() = cansancio
-  method goles() = goles
-  method consumir(consumible) {
-    cansancio = 0.max(cansancio - consumible.energia())
+  method ganarPotencia(input) {
+    potencia = 30.min(potencia + input)
   }
-
-  method efectoAlReves(jugador) {
-  keyboard.s().onPressDo({ jugador.moverseArriba(5) })
-    keyboard.d().onPressDo({ jugador.moverseIzquierda(5) })
-    keyboard.w().onPressDo({ jugador.moverseAbajo(5) })
-    keyboard.a().onPressDo({ jugador.moverseDerecha(5) })
+  method perderPotencia(input) {
+    potencia = 0.max(potencia - input)
   }
-
-  method recuperarEnergia(energia) {
-    cansancio = 0.max(cansancio - energia)cansancio = 0.max(cansancio - energia)
+  method ganarEnergia(input) {
+    energia = 100.min(energia + input)
   }
-
-  method cansarse(pos) {
-    cansancio += pos
+  method perderEnergia(input) {
+    energia = 0.max(energia - input)
   }
-
-  method moverseArriba(pos) {
-    if (pos-(cansancio/100) <= 0){position.goUp(0)} 
-    else {
-    self.cansarse(pos) 
-    position.goUp(pos-(cansancio/100))
-    }
+  method ajustarPorEnergia(cantidad) {
+    if (energia >= 80) return cantidad
+    else if (energia >= 60) return 0.8* cantidad
+    else if (energia >= 40) return 0.6* cantidad
+    else if (energia >= 20) return 0.4* cantidad
+    else if (energia > 0) return 0.2* cantidad
+    else return 0
   }
-
-  method moverseAbajo(pos) {
-    if (pos-(cansancio/100) <= 0){position.goDown(0)} 
-    else {
-    self.cansarse(pos) 
-    position.goDown(pos-(cansancio/100))
-    }
+  method moverseArriba(cantCeldas) { 
+    position.goUp(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "arriba" 
   }
-
-  method moverseDerecha(pos) {
-    if (pos-(cansancio/100) <= 0){position.goRight(0)} 
-    else {
-    self.cansarse(pos) 
-    position.goRight(pos-(cansancio/100))
-    }
+  method moverseAbajo(cantCeldas) { 
+    position.goDown(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "abajo" 
   }
-
-  method moverseIzquierda(pos) {
-    if (pos-(cansancio/100) <= 0){position.goLeft(0)} 
-    else {
-    self.cansarse(pos) 
-    position.goLeft(pos-(cansancio/100))
-    }
+  method moverseDerecha(cantCeldas) { 
+    position.goRight(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "derecha" 
   }
-
-  method decir(texto) = texto
-
-  method colision(item,jugador, numero) =
-    (jugador.position().x() - item.position().x()).abs() < numero and 
-        (jugador.position().y() - item.position().y()).abs() < numero
-  
-  method efectoColision(jugador,item) {
-    if (jugador.colision(item,jugador,5)) {
-      jugador.aplicar(item)
-      game.say(jugador, jugador.decir(item.frase()))
-      game.removeVisual(item)
-    }
- 
+  method moverseIzquierda(cantCeldas) { 
+    position.goLeft(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "izquierda" 
   }
+  method seMueveDerecha() = ultimaDireccion == "derecha"
+  method seMueveIzquierda() = ultimaDireccion == "izquierda"
+  method seMueveArriba() = ultimaDireccion == "arriba"
+  method seMueveAbajo() = ultimaDireccion == "abajo"
 
+  method moverse(xNueva, yNueva) { // por ahora este método no lo usamos.
+    x = xNueva
+    y = yNueva
+  }
+  method estaCercaDe(algo) = 
+    (self.position().x() - algo.position().x()).abs() < rangoProximidad and 
+    (self.position().y() - algo.position().y()).abs() < rangoProximidad 
 
- method hacerGol(pelota,jugador){
-      if(pelota.estaEnAreaDeGol(pelota)){
-        goles += 1
-        game.say(jugador, "¡Gol para el Jugador 1! Total: " + goles)
-        pelota.moverse(110, 50)
+  method llevarPelota(pelota) {
+    if (self.estaCercaDe(pelota)) {
+      if (self.seMueveDerecha()) {
+        pelota.moverse(pelota.position().x() + (rangoProximidad + 1), pelota.position().y())
+        self.perderEnergia(1) 
+      } 
+      else if (self.seMueveIzquierda()) {
+        pelota.moverse(pelota.position().x() - (rangoProximidad + 1), pelota.position().y())
+        self.perderEnergia(1) 
+      }
+      else if (self.seMueveArriba()) {
+        pelota.moverse(pelota.position().x(), pelota.position().y() + (rangoProximidad + 1))
+        self.perderEnergia(1) 
+      } 
+      else if (self.seMueveAbajo()) {
+        pelota.moverse(pelota.position().x(), pelota.position().y() - (rangoProximidad + 1))
+        self.perderEnergia(1)
       }
     }
-
+  }
+  method patearPelota(pelota){
+    if (self.estaCercaDe(pelota)) {
+      if (self.seMueveDerecha()) {
+        pelota.moverse(pelota.position().x() + self.ajustarPorEnergia(potencia), pelota.position().y())
+        self.perderEnergia(25)
+      } 
+      else if (self.seMueveIzquierda()) {
+        pelota.moverse(pelota.position().x() - self.ajustarPorEnergia(potencia), pelota.position().y())
+        self.perderEnergia(25)
+      }
+      else if (self.seMueveArriba()) {
+        pelota.moverse(pelota.position().x(), pelota.position().y() + self.ajustarPorEnergia(potencia))
+        self.perderEnergia(25)
+      } 
+      else if (self.seMueveAbajo()) {
+        pelota.moverse(pelota.position().x(), pelota.position().y() - self.ajustarPorEnergia(potencia))
+        self.perderEnergia(25)
+      }
+    }
+  }
+  method agarrarConsumible(consumibles) {
+    consumibles.forEach({ consumible =>
+      if (self.estaCercaDe(consumible)) {
+        consumible.aplicarSobre(self)
+        consumible.desaparecer() } 
+    })
+  }
+  method agarrarTarjeta(tarjetas, otroJugador) {
+    tarjetas.forEach({ tarjeta =>
+      if (self.estaCercaDe(tarjeta)) {
+        tarjeta.aplicarTarjeta(self, otroJugador)
+        tarjeta.desaparecer() } 
+    })
+  }
+  method decir(texto) = texto
 }
 
 class Item {
-  const imagen
-  var frase 
-  const x = 0.randomUpTo(game.width()).truncate(0)
-  const y = 0.randomUpTo(game.height()).truncate(0)
-  var position = game.at(x, y)
+  const property image
+  var property position = game.at(-100, -100)
 
-  method image() = imagen
-  method position() = position
-  method moverse(nuevo_x, nuevo_y) {
-    position = game.at(nuevo_x, nuevo_y)
+  method moverse(xf, yf) {
+    position = game.at(xf, yf)
   }
   method moverseAlAzar() {
-    const x_random = 0.randomUpTo(game.width()).truncate(0)
-    const y_random = 0.randomUpTo(game.height()).truncate(0)
-    position = game.at(x_random,y_random)
+    position = game.at(12.randomUpTo(208).truncate(0), 2.randomUpTo(96).truncate(0))
   }
-
-  method frase() = frase
 }
-
+// Consumibles
 class Consumible inherits Item {
-  const energia
-  method energia() = energia
-  method aplicar(jugador,consumible) {
-    jugador.recuperarEnergia(energia)
+  const property energia = 0
+  const property potencia = 0
+  method aplicarSobre (jugador) {}
+  method desaparecer() {}
+}
+class Agua inherits Consumible (energia = 20, potencia = 5, image = "agua.png") {
+	override method aplicarSobre(jugador) {
+		jugador.ganarEnergia(energia) // permite 10 pasos más.
+    jugador.ganarPotencia(potencia) // llena 1/6 de la potencia máxima.
+    game.say(jugador, jugador.decir("Rica agua"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(1000, {
+      self.moverseAlAzar() // reaparece luego de 1 seg.
+      game.onTick (8000, "el agua se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-
-class Tarjetas inherits Item {
-  var cantidad
-  method aplicar(jugador) {
-    jugador.cansarse(cantidad) // cuál es la diferencia entre esto y hardcodearle el efecto desde main?
+class Gaseosa inherits Consumible (energia = 30, potencia = 5, image = "coke2.png") {
+	override method aplicarSobre(jugador) {
+		jugador.ganarEnergia(energia) // permite 15 pasos más.
+    jugador.ganarPotencia(potencia) // llena 1/6 de la potencia máxima.
+    game.say(jugador, jugador.decir("Rica gaseosa"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(2000, { 
+      self.moverseAlAzar() // reaparece luego de 2 seg.
+      game.onTick (8000, "la gaseosa se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-
-class CascaraBanana inherits Item {
-  method aplicar(jugador) {
-    jugador.moverseArriba(5)
-    jugador.moverseDerecha(10)
+class Banana inherits Consumible (energia = 40, potencia = 10, image = "bananas.png") {
+	override method aplicarSobre(jugador) {
+		jugador.ganarEnergia(energia) // permite 20 pasos más.
+    jugador.ganarPotencia(potencia) // llena 1/3 de la potencia máxima.
+    game.say(jugador, jugador.decir("Rica fruta"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(3000, { 
+      self.moverseAlAzar() // reaparece luego de 3 seg.
+      game.onTick (6000, "la banana se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-
-class Pelota inherits Item{
-  const arco1X = game.width() / 2 - 5 // Coordenada x de la portería 1 (izquierda)
-    const arco1Y = 0 // Coordenada y de la portería 1
-    const arco1Ancho = 10 // Ancho de la portería 1
-    const arco1Alto = 5 // Alto de la portería 1
-
-    const arco2X = game.width() / 2 - 5 // Coordenada x de la portería 2 (derecha)
-    const arco2Y = game.height() - 10 // Coordenada y de la portería 2
-    const arco2Ancho = 10 // Ancho de la portería 2
-    const arco2Alto = 5 // Alto de la portería 2
-
-    // Marcadores de goles
-    const proximidad = 4
-
-    method golpearPelota(jugador, pelota){
-      if (jugador.colision(pelota,jugador,4)){
-        pelota.direccionarPelota(jugador,pelota)
-      }
-    }
-
-    method direccionarPelota(jugador,pelota){
-       if (jugador.position().x() < pelota.position().x()) {
-            pelota.moverse(pelota.position().x() + 3, pelota.position().y())
-        } else if (jugador.position().x() > pelota.position().x()) {
-            pelota.moverse(pelota.position().x() - 3, pelota.position().y())
-        }
-        if (jugador.position().y() < pelota.position().y()) {
-            pelota.moverse(pelota.position().x(), pelota.position().y() + 3)
-        } else if (jugador.position().y() > pelota.position().y()) {
-            pelota.moverse(pelota.position().x(), pelota.position().y() - 3)
-        }
-    }
-
-    method estaEnAreaDeGol(pelota) = pelota.position().x() >= arco1X && pelota.position().x() <= (arco1X + arco1Ancho) &&
-        pelota.position().y() >= arco1Y && pelota.position().y() <= (arco1Y + arco1Alto)
-   
-
+class Comida inherits Consumible (energia = 80, potencia = 20, image = "comida.png") {
+	override method aplicarSobre(jugador) {
+		jugador.ganarEnergia(energia) // permite 30 pasos más.
+    jugador.ganarPotencia(potencia) // llena 2/3 de la potencia máxima.
+    game.say(jugador, jugador.decir("Rica comida"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(5000, { 
+      self.moverseAlAzar() // reaparece luego de 5 seg.
+      game.onTick (5000, "la comida se empieza a mover", {self.moverseAlAzar()}) })
+  }
 }
-  
+class BananaPeelDer inherits Consumible (energia = 20, image = "bananaPeel.png") {
+	override method aplicarSobre(jugador) {
+		jugador.perderEnergia(energia) // permite 10 pasos menos.
+    jugador.moverseArriba(5.randomUpTo(15).truncate(0))
+    jugador.moverseDerecha(5.randomUpTo(15).truncate(0))
+    game.say(jugador, jugador.decir("Noooooooo"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(100, { 
+      self.moverseAlAzar() // reaparece casi instantáneamente.
+      game.onTick (2000, "la bananaPeelDer se empieza a mover", {self.moverseAlAzar()}) })
+  }
+}
+class BananaPeelIzq inherits Consumible (energia = 20, image = "bananaPeel.png") {
+	override method aplicarSobre(jugador) {
+		jugador.perderEnergia(energia) // permite 10 pasos menos.
+    jugador.moverseAbajo(5.randomUpTo(15).truncate(0))
+    jugador.moverseIzquierda(5.randomUpTo(15).truncate(0))
+    game.say(jugador, jugador.decir("Noooooooo"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(100, { 
+      self.moverseAlAzar() // reaparece casi instantáneamente.
+      game.onTick (4000, "la bananaPeelIzq se empieza a mover", {self.moverseAlAzar()}) })
+  }
+}
+// Tarjetas
+class Tarjeta inherits Item {
+  const property energia
+  const property potencia
+  method aplicarTarjeta (jugador, jugadorAplicado) {}
+  method desaparecer() {}
+}
+class TarjetaAmarilla inherits Tarjeta (energia = 50, potencia = 10, image = "yellowCard.png") {
+	override method aplicarTarjeta(jugador, jugadorAplicado) {
+		jugadorAplicado.perderEnergia(energia) // permite 25 pasos menos.
+    jugadorAplicado.perderPotencia(potencia) // quita 1/3 de la potencia máxima.
+    game.say(jugador, jugador.decir("Toma amarilla"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(5000, { 
+      self.moverseAlAzar() // reaparece luego de 5 seg.
+      game.onTick (4000, "la tarjAmarilla se empieza a mover", {self.moverseAlAzar()}) })
+  }
+}
+class TarjetaRoja inherits Tarjeta (energia = 100, potencia = 20, image = "redCard.png") {
+	override method aplicarTarjeta(jugador, jugadorAplicado) {
+	  jugadorAplicado.perderEnergia(energia) // permite 50 pasos menos (inmobiliza).
+    jugadorAplicado.perderPotencia(potencia)  // quita 2/3 de la potencia máxima.
+    game.say(jugador, jugador.decir("Toma roja!"))
+	}
+  override method desaparecer() {
+    self.moverse(-100, -100)
+    game.schedule(10000, { 
+      self.moverseAlAzar() // reaparece luego de 10 seg.
+      game.onTick (2000, "la tarjRoja se empieza a mover", {self.moverseAlAzar()}) })
+  }
+}

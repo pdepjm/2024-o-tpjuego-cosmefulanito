@@ -1,17 +1,15 @@
-- [X] Cambiar background por una mejor cancha.
-- [X] Agregar más consumibles (objetos distintos).
-- [X] Agregar la pelota.
-- [X] MODELAR COLISION BASICA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-- [ ] Modelar interacción con la pelota (que la patee en una direccion).
-- [ ] Revisar colisión con consumibles (que el consumible desaparezca (y cómo vuelve a aparecer otro?)). 
-- [ ] Modelar colisión con jugador rival? (que lo empuje).
-- [ ] Definir bordes de la cancha.
-- [X] Agregar sonido de ambiente.
-- [ ] Agregar sonidos de colisiones.
-- [ ] Modelar mecánica de goles............y de fin de partida.
-- [ ] Agregar menú?
-- [X] Agregar ¿tarjetas? para afectar al otro jugador (tarjeta roja lo deja quieto por ej.).
-- DELEGAR Y MODULARIZAR CON OBJETOS Y METODOS, ELIMINAR ALGORITMIA PROCEDURAL DE C.
-- EN COLISION, NO PREGUNTAR SI CHOCA CON BANANA. USAR MENSAJES: CUANDO ALGO CHOCA CON UNA BANANA, MANDARLE UN MENSAJE
-  A ESE ALGO (MOVETE).
-- SOBRE EL REMOVE VISUAL: EL OBJETO SIGUE ESTANDO PORQUE ESTÁ LA REFERENCIA (CONSTANTE). HAY QUE MODIFICAR ESO.
+- [X] Arreglar mecánica para llevar la pelota.
+- [X] Agregar mecánica para patear la pelota en una dirección.
+- [ ] Agregar mecánica para colisiones con borde de la cancha.
+- [ ] Agregar sonidos colisiones.
+- [ ] Agregar mecánica de goles: sonido, contador y reinicio posiciones.
+- [ ] Agregar mecánica para fin de partida: que imprima un cartelito y envíe al menú principal.
+- [ ] Agregar menú principal.
+- [ ] Agregar banana maestra que invoque un montón de bananas.
+
+Observaciones
+- Tal vez la evaluacion de si alguien está cerca de algo podría delegarse en el programa en vez de tenerla en 800 ifs.
+- El mute del sonido funciona una sola vez.
+- Los cuadros de diálogo no siempre se muestran (?).
+- EL ONTICK AL AGARRAR UN CONSUMIBLE SE COMPARTE: DEL TOTAL SIEMPRE QUEDA UNO SOLO.
+
