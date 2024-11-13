@@ -1,7 +1,7 @@
 class Jugador {
   const property image
-  var property x = -100
-  var property y = -100
+  var property x = 105
+  var property y = 50
   var property position = game.at(x, y)
   var property ultimaDireccion = "ninguna"
   var property energia = 100
@@ -28,39 +28,36 @@ class Jugador {
     else if (energia > 0) return 0.2* cantidad
     else return 0
   }
-  method moverseArriba(cantCeldas) {
-    if (self.position().y() + self.ajustarPorEnergia(cantCeldas) <= 98) { // no pasa de yBordeSup
-      position.goUp(self.ajustarPorEnergia(cantCeldas)) 
-      self.perderEnergia(2) 
-      ultimaDireccion = "arriba" 
-    }
+  method moverseArriba(cantCeldas) { 
+    position.goUp(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "arriba" 
   }
-  method moverseAbajo(cantCeldas) {
-    if (self.position().y() - self.ajustarPorEnergia(cantCeldas) >= 1) { // no pasa de yBordeInf
-      position.goDown(self.ajustarPorEnergia(cantCeldas)) 
-      self.perderEnergia(2) 
-      ultimaDireccion = "abajo" 
-    }
+  method moverseAbajo(cantCeldas) { 
+    position.goDown(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "abajo" 
   }
   method moverseDerecha(cantCeldas) { 
-    if (self.position().x() + self.ajustarPorEnergia(cantCeldas) <= 209) {  // no pasa de xBordeDer
-      position.goRight(self.ajustarPorEnergia(cantCeldas)) 
-      self.perderEnergia(2) 
-      ultimaDireccion = "derecha" 
-    }
+    position.goRight(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "derecha" 
   }
-  method moverseIzquierda(cantCeldas) {
-    if (self.position().x() - self.ajustarPorEnergia(cantCeldas) >= 10) { // no pasa de xBordeIzq
-      position.goLeft(self.ajustarPorEnergia(cantCeldas)) 
-      self.perderEnergia(2) 
-      ultimaDireccion = "izquierda"
-    } 
+  method moverseIzquierda(cantCeldas) { 
+    position.goLeft(self.ajustarPorEnergia(cantCeldas)) 
+    self.perderEnergia(2) 
+    ultimaDireccion = "izquierda" 
   }
   method seMueveDerecha() = ultimaDireccion == "derecha"
   method seMueveIzquierda() = ultimaDireccion == "izquierda"
   method seMueveArriba() = ultimaDireccion == "arriba"
   method seMueveAbajo() = ultimaDireccion == "abajo"
-
+  /*
+  method moverse(xNueva, yNueva) {
+    x = xNueva
+    y = yNueva
+  }
+  */
   method estaCercaDe(algo) = 
     (self.position().x() - algo.position().x()).abs() < rangoProximidad and 
     (self.position().y() - algo.position().y()).abs() < rangoProximidad 
@@ -125,7 +122,7 @@ class Jugador {
 class Item {
   const property image
   var property position = game.at(-100, -100)
-  
+
   method moverse(xf, yf) {
     position = game.at(xf, yf)
   }
@@ -267,4 +264,18 @@ class Pelota inherits Item (image = "pelota.png") {
     self.position().x() > xDer and 
     self.position().y() > yInf and
     self.position().y() < ySup
+}
+
+object fondo2 {
+ method position() = game.at(80,35)
+ method image() = "gamefinal.jpg" 
+
+  
+}
+
+object fondo3 {
+ method position() = game.origin()
+ method image() = "jueguitochachi.jpg" 
+
+  
 }
