@@ -6,6 +6,7 @@ object  jueguito{
     const jugador1 = new Jugador (image = "argentino.png", position = new MutablePosition(x=xiJugador1, y=yiTodos))
     const jugador2 = new Jugador (image = "brasilero.png", position = new MutablePosition(x=xiJugador2, y=yiTodos))
     const pelota = new Pelota (position = game.at(xiPelota, yiTodos))
+    var configurado = false
 
     // Consumibles y Tarjetas
 	const agua1 = new Agua() const agua2 = new Agua() const agua3 = new Agua() const agua4 = new Agua()
@@ -92,7 +93,10 @@ method jugar() {
 
     golesJugador1 = 0
     golesJugador2 = 0
+    
 
+
+if (configurado == false) {    
     keyboard.w().onPressDo({ jugador1.moverseArriba(5) })
     keyboard.a().onPressDo({ jugador1.moverseIzquierda(5) })
     keyboard.s().onPressDo({ jugador1.moverseAbajo(5) })
@@ -104,6 +108,9 @@ method jugar() {
     keyboard.down().onPressDo({ jugador2.moverseAbajo(5) })
     keyboard.right().onPressDo({ jugador2.moverseDerecha(5) })
     keyboard.enter().onPressDo({ jugador2.patearPelota(pelota) })
+    configurado = true
+    }
+
 
         
 // OBJETOS Y REFERENCIAS
@@ -152,6 +159,8 @@ method jugar() {
             //reproducir sonidito.
             game.schedule(2000, {
                 pelota.moverse(xiPelota, yiTodos)
+                self.setearPosicion(jugador1,xiJugador1,yiTodos)
+                self.setearPosicion(jugador2,xiJugador2,yiTodos)
                 //reiniciar posición jugadores.
             })
 
@@ -165,6 +174,8 @@ method jugar() {
             //reproducir sonidito.
             game.schedule(2000, {
                 pelota.moverse(xiPelota, yiTodos)
+                self.setearPosicion(jugador1,xiJugador1,yiTodos)
+                self.setearPosicion(jugador2,xiJugador2,yiTodos)
                 //reiniciar posición jugadores.
             })
 
@@ -204,7 +215,7 @@ method jugar() {
         game.removeVisual(amarilla1)
         game.removeVisual(amarilla2)
         game.removeVisual(roja)
-         game.removeVisual(jugador1)
+        game.removeVisual(jugador1)
         game.removeVisual(jugador2)
         game.removeVisual(pelota)
 
@@ -214,9 +225,13 @@ method jugar() {
 
     }
 
+method setearPosicion(jugador,xe,ye) {
+    jugador.position(new MutablePosition(x=xe, y=ye))
+} 
+
 
 method checkFinal(goles) {
-    if(goles == 10) {self.close()}
+    if(goles == 1) {self.close()}
     }
   
 
