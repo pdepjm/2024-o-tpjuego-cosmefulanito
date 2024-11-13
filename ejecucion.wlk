@@ -231,7 +231,7 @@ method setearPosicion(jugador,xe,ye) {
 
 
 method checkFinal(goles) {
-    if(goles == 1) {self.close()}
+    if(goles == 5) {self.close()}
     }
   
 
