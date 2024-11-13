@@ -52,11 +52,12 @@ class Jugador {
   method seMueveIzquierda() = ultimaDireccion == "izquierda"
   method seMueveArriba() = ultimaDireccion == "arriba"
   method seMueveAbajo() = ultimaDireccion == "abajo"
-
-  method moverse(xNueva, yNueva) { // por ahora este método no lo usamos.
+  /*
+  method moverse(xNueva, yNueva) {
     x = xNueva
     y = yNueva
   }
+  */
   method estaCercaDe(algo) = 
     (self.position().x() - algo.position().x()).abs() < rangoProximidad and 
     (self.position().y() - algo.position().y()).abs() < rangoProximidad 
@@ -125,6 +126,9 @@ class Item {
   method moverse(xf, yf) {
     position = game.at(xf, yf)
   }
+  method irseDePantalla() {
+    self.moverse(-100, -100)
+  }
   method moverseAlAzar() {
     position = game.at(12.randomUpTo(208).truncate(0), 2.randomUpTo(96).truncate(0))
   }
@@ -143,7 +147,7 @@ class Agua inherits Consumible (energia = 20, potencia = 5, image = "agua.png") 
     game.say(jugador, jugador.decir("Rica agua"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(1000, {
       self.moverseAlAzar() // reaparece luego de 1 seg.
       game.onTick (8000, "el agua se empieza a mover", {self.moverseAlAzar()}) })
@@ -156,7 +160,7 @@ class Gaseosa inherits Consumible (energia = 30, potencia = 5, image = "coke2.pn
     game.say(jugador, jugador.decir("Rica gaseosa"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(2000, { 
       self.moverseAlAzar() // reaparece luego de 2 seg.
       game.onTick (8000, "la gaseosa se empieza a mover", {self.moverseAlAzar()}) })
@@ -169,7 +173,7 @@ class Banana inherits Consumible (energia = 40, potencia = 10, image = "bananas.
     game.say(jugador, jugador.decir("Rica fruta"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(3000, { 
       self.moverseAlAzar() // reaparece luego de 3 seg.
       game.onTick (6000, "la banana se empieza a mover", {self.moverseAlAzar()}) })
@@ -182,35 +186,35 @@ class Comida inherits Consumible (energia = 80, potencia = 20, image = "comida.p
     game.say(jugador, jugador.decir("Rica comida"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(5000, { 
       self.moverseAlAzar() // reaparece luego de 5 seg.
       game.onTick (5000, "la comida se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-class BananaPeelDer inherits Consumible (energia = 20, image = "bananaPeel.png") {
+class BananaPeelDer inherits Consumible (energia = 10, image = "bananaPeel.png") {
 	override method aplicarSobre(jugador) {
-		jugador.perderEnergia(energia) // permite 10 pasos menos.
+		jugador.perderEnergia(energia) // permite 5 pasos menos.
     jugador.moverseArriba(5.randomUpTo(15).truncate(0))
     jugador.moverseDerecha(5.randomUpTo(15).truncate(0))
     game.say(jugador, jugador.decir("Noooooooo"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(100, { 
       self.moverseAlAzar() // reaparece casi instantáneamente.
       game.onTick (2000, "la bananaPeelDer se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-class BananaPeelIzq inherits Consumible (energia = 20, image = "bananaPeel.png") {
+class BananaPeelIzq inherits Consumible (energia = 10, image = "bananaPeel.png") {
 	override method aplicarSobre(jugador) {
-		jugador.perderEnergia(energia) // permite 10 pasos menos.
+		jugador.perderEnergia(energia) // permite 5 pasos menos.
     jugador.moverseAbajo(5.randomUpTo(15).truncate(0))
     jugador.moverseIzquierda(5.randomUpTo(15).truncate(0))
     game.say(jugador, jugador.decir("Noooooooo"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(100, { 
       self.moverseAlAzar() // reaparece casi instantáneamente.
       game.onTick (4000, "la bananaPeelIzq se empieza a mover", {self.moverseAlAzar()}) })
@@ -230,7 +234,7 @@ class TarjetaAmarilla inherits Tarjeta (energia = 50, potencia = 10, image = "ye
     game.say(jugador, jugador.decir("Toma amarilla"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(5000, { 
       self.moverseAlAzar() // reaparece luego de 5 seg.
       game.onTick (4000, "la tarjAmarilla se empieza a mover", {self.moverseAlAzar()}) })
@@ -243,9 +247,21 @@ class TarjetaRoja inherits Tarjeta (energia = 100, potencia = 20, image = "redCa
     game.say(jugador, jugador.decir("Toma roja!"))
 	}
   override method desaparecer() {
-    self.moverse(-100, -100)
+    self.irseDePantalla()
     game.schedule(10000, { 
       self.moverseAlAzar() // reaparece luego de 10 seg.
       game.onTick (2000, "la tarjRoja se empieza a mover", {self.moverseAlAzar()}) })
   }
+}
+// Pelota
+class Pelota inherits Item (image = "pelota.png") {
+  method entraEnArcoIzq(xIzq, yInf, ySup) = 
+    self.position().x() < xIzq and 
+    self.position().y() > yInf and
+    self.position().y() < ySup
+
+  method entraEnArcoDer(xDer, yInf, ySup) = 
+    self.position().x() > xDer and 
+    self.position().y() > yInf and
+    self.position().y() < ySup
 }

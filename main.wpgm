@@ -56,29 +56,30 @@ program FulbotGame {
     const yInfAmbosArcos = 42
     const ySupAmbosArcos = 56
 
-    // Coordenadas jugadores
+    // Coordenadas iniciales
     const xiJugador1 = 97
     const xiJugador2 = 120
-    const yiAmbosJugadores = 50
+    const yiTodos = 50
+    const xiPelota = 110
 
-    // Jugadores
-    const jugador1 = new Jugador (image = "argentino.png", position = new MutablePosition(x=xiJugador1, y=yiAmbosJugadores))
-    const jugador2 = new Jugador (image = "brasilero.png", position = new MutablePosition(x=xiJugador2, y=yiAmbosJugadores))
+    // Jugadores y Pelota
+    const jugador1 = new Jugador (image = "argentino.png", position = new MutablePosition(x=xiJugador1, y=yiTodos))
+    const jugador2 = new Jugador (image = "brasilero.png", position = new MutablePosition(x=xiJugador2, y=yiTodos))
+    const pelota = new Pelota (position = game.at(xiPelota, yiTodos))
 
     // Consumibles y Tarjetas
 	const agua1 = new Agua() const agua2 = new Agua() const agua3 = new Agua() const agua4 = new Agua()
     const gaseosa1 = new Gaseosa() const gaseosa2 = new Gaseosa()
     const comida = new Comida()
     const banana1 = new Banana() const banana2 = new Banana()
-    const bananaPeel1 = new BananaPeelDer() const bananaPeel2 = new BananaPeelIzq()
+    const bananaPeel1 = new BananaPeelDer() const bananaPeel2 = new BananaPeelIzq() const bananaPeel3 = new BananaPeelIzq()
     const amarilla1 = new TarjetaAmarilla() const amarilla2 = new TarjetaAmarilla()
     const roja = new TarjetaRoja()
 
-    const consumibles = [agua1, agua2, agua3, agua4, gaseosa1, gaseosa2, comida, banana1, banana2, bananaPeel1, bananaPeel2]
+    const consumibles = [agua1, agua2, agua3, agua4, gaseosa1, gaseosa2, comida, banana1, banana2, bananaPeel1, bananaPeel2, bananaPeel3]
     const tarjetas = [amarilla1, amarilla2, roja]
 
     // Otros
-    const pelota = new Item (image = "pelota.png", position = game.at(110, 50))
     var golesJugador1 = 0
     var golesJugador2 = 0
 
@@ -90,7 +91,7 @@ program FulbotGame {
     game.addVisual(gaseosa1) game.addVisual(gaseosa2)
     game.addVisual(comida)
     game.addVisual(banana1) game.addVisual(banana2)
-    game.addVisual(bananaPeel1) game.addVisual(bananaPeel2)
+    game.addVisual(bananaPeel1) game.addVisual(bananaPeel2) game.addVisual(bananaPeel3)
     game.addVisual(amarilla1) game.addVisual(amarilla2)
     game.addVisual(roja)
     game.say(jugador1, "Muchaaaaachoooooos") 
@@ -99,7 +100,7 @@ program FulbotGame {
 // EVENTOS DE INICIO
     game.schedule (1000, { agua1.moverseAlAzar() agua2.moverseAlAzar() })
     game.schedule (2000, { agua3.moverseAlAzar() agua4.moverseAlAzar() })
-    game.schedule (3000, { banana1.moverseAlAzar() bananaPeel1.moverseAlAzar() })
+    game.schedule (3000, { banana1.moverseAlAzar() bananaPeel1.moverseAlAzar() bananaPeel3.moverseAlAzar() })
     game.schedule (4000, { gaseosa1.moverseAlAzar() gaseosa2.moverseAlAzar()})
     game.schedule (6000, { banana2.moverseAlAzar() bananaPeel2.moverseAlAzar() })
     game.schedule (8000, { comida.moverseAlAzar() })
@@ -112,30 +113,33 @@ program FulbotGame {
     game.onTick (100, "chequeo de colisiones", {
         [jugador1, jugador2].forEach({ jugador =>
             jugador.agarrarConsumible (consumibles)
-            jugador.llevarPelota (pelota)
+            jugador.llevarPelota (pelota) 
         })
         jugador1.agarrarTarjeta (tarjetas, jugador2)
         jugador2.agarrarTarjeta (tarjetas, jugador1)
+        // Arco1
+        if (pelota.entraEnArcoIzq(xLineaArco1, yInfAmbosArcos, ySupAmbosArcos)) {
+            pelota.irseDePantalla()
+            golesJugador2 += 1
+            game.say(jugador2, "¡Gol para el Jugador 2! Total: " + golesJugador2)
+            //reproducir sonidito.
+            game.schedule(2000, {
+                pelota.moverse(xiPelota, yiTodos)
+                //reiniciar posición jugadores.
+            })
+        }
+        // Arco2
+        if (pelota.entraEnArcoDer(xLineaArco2, yInfAmbosArcos, ySupAmbosArcos)) {
+            pelota.irseDePantalla()
+            golesJugador1 += 1
+            game.say(jugador1, "¡Gol para el Jugador 1! Total: " + golesJugador1)
+            //reproducir sonidito.
+            game.schedule(2000, {
+                pelota.moverse(xiPelota, yiTodos)
+                //reiniciar posición jugadores.
+            })
+        }
     })
-    /*
-    if (pelota.position().x() >= arco1X && pelota.position().x() <= (arco1X + arco1Ancho) &&
-        pelota.position().y() >= arco1Y && pelota.position().y() <= (arco1Y + arco1Alto)) {
-        golesJugador2 += 1
-        game.say(jugador2, "¡Gol para el Jugador 2! Total: " + golesJugador2)
-        // Reiniciamos posiciones
-        pelota.moverse(110, 50)
-        jugador1.moverse(xiJugador1, yiAmbosJugadores)
-        jugador2.moverse(xiJugador2, yiAmbosJugadores)
-    }
-    if (pelota.position().x() >= arco2X && pelota.position().x() <= (arco2X + arco2Ancho) &&
-        pelota.position().y() >= arco2Y && pelota.position().y() <= (arco2Y + arco2Alto)) {
-        golesJugador1 += 1
-        game.say(jugador1, "¡Gol para el Jugador 1! Total: " + golesJugador1)
-        // Reiniciamos posiciones
-        pelota.moverse(110, 50)
-        jugador1.moverse(xiJugador1, yiAmbosJugadores)
-        jugador2.moverse(xiJugador2, yiAmbosJugadores)
-    }
-    */
+        
     game.start()
 }

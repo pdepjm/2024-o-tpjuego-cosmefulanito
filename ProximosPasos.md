@@ -1,7 +1,8 @@
+A realizar
 - [X] Arreglar mecánica para llevar la pelota.
 - [X] Agregar mecánica para patear la pelota en una dirección.
 - [ ] Agregar mecánica para colisiones con borde de la cancha.
-- [ ] Agregar mecánica de goles: sonido, contador y reinicio posiciones.
+- [casi] Agregar mecánica de goles: sonido, contador y reinicio posiciones.
 - [ ] Agregar mecánica para fin de partida: que imprima un cartelito y envíe al menú principal.
 - [ ] Agregar menú principal.
 - [ ] Agregar sonidos colisiones.
