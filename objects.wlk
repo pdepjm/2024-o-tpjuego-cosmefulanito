@@ -29,77 +29,92 @@ class Jugador {
     else return 0
   }
   method moverseArriba(cantCeldas) { 
-    position.goUp(self.ajustarPorEnergia(cantCeldas)) 
-    self.perderEnergia(2) 
-    ultimaDireccion = "arriba" 
+    if (self.position().y() + self.ajustarPorEnergia(cantCeldas) <= 98) { // no pasa de yBordeSup.
+      position.goUp(self.ajustarPorEnergia(cantCeldas)) 
+      self.perderEnergia(2) 
+      ultimaDireccion = "arriba" 
+    } 
   }
   method moverseAbajo(cantCeldas) { 
-    position.goDown(self.ajustarPorEnergia(cantCeldas)) 
-    self.perderEnergia(2) 
-    ultimaDireccion = "abajo" 
+    if (self.position().y() - self.ajustarPorEnergia(cantCeldas) >= 1) { // no pasa de yBordeInf.
+      position.goDown(self.ajustarPorEnergia(cantCeldas)) 
+      self.perderEnergia(2) 
+      ultimaDireccion = "abajo" 
+    }
   }
   method moverseDerecha(cantCeldas) { 
-    position.goRight(self.ajustarPorEnergia(cantCeldas)) 
-    self.perderEnergia(2) 
-    ultimaDireccion = "derecha" 
+    if (self.position().x() + self.ajustarPorEnergia(cantCeldas) <= 209) {  // no pasa de xBordeDer.
+      position.goRight(self.ajustarPorEnergia(cantCeldas)) 
+      self.perderEnergia(2) 
+      ultimaDireccion = "derecha" 
+    }
   }
   method moverseIzquierda(cantCeldas) { 
-    position.goLeft(self.ajustarPorEnergia(cantCeldas)) 
-    self.perderEnergia(2) 
-    ultimaDireccion = "izquierda" 
+    if (self.position().x() - self.ajustarPorEnergia(cantCeldas) >= 10) { // no pasa de xBordeIzq.
+      position.goLeft(self.ajustarPorEnergia(cantCeldas)) 
+      self.perderEnergia(2) 
+      ultimaDireccion = "izquierda"
+    } 
   }
   method seMueveDerecha() = ultimaDireccion == "derecha"
   method seMueveIzquierda() = ultimaDireccion == "izquierda"
   method seMueveArriba() = ultimaDireccion == "arriba"
   method seMueveAbajo() = ultimaDireccion == "abajo"
-  /*
-  method moverse(xNueva, yNueva) {
-    x = xNueva
-    y = yNueva
-  }
-  */
+  
   method estaCercaDe(algo) = 
     (self.position().x() - algo.position().x()).abs() < rangoProximidad and 
     (self.position().y() - algo.position().y()).abs() < rangoProximidad 
 
   method llevarPelota(pelota) {
-    if (self.estaCercaDe(pelota)) {
-      if (self.seMueveDerecha()) {
-        pelota.moverse(pelota.position().x() + (rangoProximidad + 1), pelota.position().y())
-        self.perderEnergia(1) 
-      } 
-      else if (self.seMueveIzquierda()) {
-        pelota.moverse(pelota.position().x() - (rangoProximidad + 1), pelota.position().y())
-        self.perderEnergia(1) 
+    if (self.estaCercaDe(pelota) and self.seMueveDerecha()) { 
+      if (pelota.position().x() + (rangoProximidad + 1) <= 209) {
+        pelota.moverse(pelota.position().x() + (rangoProximidad + 1), pelota.position().y()) // la empuja a la derecha.
+      } else {
+        pelota.moverse(pelota.position().x() - (2*rangoProximidad + 1), pelota.position().y()) // rebota hacia la izquierda.
       }
-      else if (self.seMueveArriba()) {
-        pelota.moverse(pelota.position().x(), pelota.position().y() + (rangoProximidad + 1))
-        self.perderEnergia(1) 
-      } 
-      else if (self.seMueveAbajo()) {
-        pelota.moverse(pelota.position().x(), pelota.position().y() - (rangoProximidad + 1))
-        self.perderEnergia(1)
+      self.perderEnergia(1) 
+    } 
+    else if (self.estaCercaDe(pelota) and self.seMueveIzquierda()) { 
+      if (pelota.position().x() - (rangoProximidad + 1) >= 10) {
+        pelota.moverse(pelota.position().x() - (rangoProximidad + 1), pelota.position().y()) // la empuja a la izquierda.
+      } else {
+        pelota.moverse(pelota.position().x() + (2*rangoProximidad + 1), pelota.position().y()) // rebota hacia la derecha.
       }
+      self.perderEnergia(1) 
+    }
+    else if (self.estaCercaDe(pelota) and self.seMueveArriba()) {
+      if (pelota.position().y() + (rangoProximidad + 1) <= 98) {
+        pelota.moverse(pelota.position().x(), pelota.position().y() + (rangoProximidad + 1)) // la empuja hacia arriba.
+      } else {
+        pelota.moverse(pelota.position().x(), pelota.position().y() - (2*rangoProximidad + 1)) // rebota hacia abajo.
+      }
+      self.perderEnergia(1)
+    } 
+    else if (self.estaCercaDe(pelota) and self.seMueveAbajo()) {
+      if (pelota.position().y() - (rangoProximidad + 1) >= 1) {
+        pelota.moverse(pelota.position().x(), pelota.position().y() - (rangoProximidad + 1)) // la empuja hacia abajo.
+      } else {
+        pelota.moverse(pelota.position().x(), pelota.position().y() + (2*rangoProximidad + 1)) // rebota hacia arriba.
+      }
+      self.perderEnergia(1)
     }
   }
   method patearPelota(pelota){
-    if (self.estaCercaDe(pelota)) {
-      if (self.seMueveDerecha()) {
-        pelota.moverse(pelota.position().x() + self.ajustarPorEnergia(potencia), pelota.position().y())
-        self.perderEnergia(25)
-      } 
-      else if (self.seMueveIzquierda()) {
-        pelota.moverse(pelota.position().x() - self.ajustarPorEnergia(potencia), pelota.position().y())
-        self.perderEnergia(25)
-      }
-      else if (self.seMueveArriba()) {
-        pelota.moverse(pelota.position().x(), pelota.position().y() + self.ajustarPorEnergia(potencia))
-        self.perderEnergia(25)
-      } 
-      else if (self.seMueveAbajo()) {
-        pelota.moverse(pelota.position().x(), pelota.position().y() - self.ajustarPorEnergia(potencia))
-        self.perderEnergia(25)
-      }
+    if (self.estaCercaDe(pelota) and self.seMueveDerecha()) {
+      pelota.moverse(pelota.position().x() + self.ajustarPorEnergia(potencia), pelota.position().y())
+      self.perderEnergia(25)
+    } 
+    else if (self.estaCercaDe(pelota) and self.seMueveIzquierda()) {
+      pelota.moverse(pelota.position().x() - self.ajustarPorEnergia(potencia), pelota.position().y())
+      self.perderEnergia(25)
+    }
+    else if (self.estaCercaDe(pelota) and self.seMueveArriba()) {
+      pelota.moverse(pelota.position().x(), pelota.position().y() + self.ajustarPorEnergia(potencia))
+      self.perderEnergia(25)
+    } 
+    else if (self.estaCercaDe(pelota) and self.seMueveAbajo()) {
+      pelota.moverse(pelota.position().x(), pelota.position().y() - self.ajustarPorEnergia(potencia))
+      self.perderEnergia(25)
     }
   }
   method agarrarConsumible(consumibles) {
@@ -150,10 +165,10 @@ class Agua inherits Consumible (energia = 20, potencia = 5, image = "agua.png") 
     self.irseDePantalla()
     game.schedule(1000, {
       self.moverseAlAzar() // reaparece luego de 1 seg.
-      game.onTick (8000, "el agua se empieza a mover", {self.moverseAlAzar()}) })
+      game.onTick (10000, "el agua se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-class Gaseosa inherits Consumible (energia = 30, potencia = 5, image = "coke2.png") {
+class Gaseosa inherits Consumible (energia = 40, potencia = 5, image = "coke2.png") {
 	override method aplicarSobre(jugador) {
 		jugador.ganarEnergia(energia) // permite 15 pasos más.
     jugador.ganarPotencia(potencia) // llena 1/6 de la potencia máxima.
@@ -163,10 +178,10 @@ class Gaseosa inherits Consumible (energia = 30, potencia = 5, image = "coke2.pn
     self.irseDePantalla()
     game.schedule(2000, { 
       self.moverseAlAzar() // reaparece luego de 2 seg.
-      game.onTick (8000, "la gaseosa se empieza a mover", {self.moverseAlAzar()}) })
+      game.onTick (9000, "la gaseosa se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-class Banana inherits Consumible (energia = 40, potencia = 10, image = "bananas.png") {
+class Banana inherits Consumible (energia = 60, potencia = 10, image = "bananas.png") {
 	override method aplicarSobre(jugador) {
 		jugador.ganarEnergia(energia) // permite 20 pasos más.
     jugador.ganarPotencia(potencia) // llena 1/3 de la potencia máxima.
@@ -176,7 +191,7 @@ class Banana inherits Consumible (energia = 40, potencia = 10, image = "bananas.
     self.irseDePantalla()
     game.schedule(3000, { 
       self.moverseAlAzar() // reaparece luego de 3 seg.
-      game.onTick (6000, "la banana se empieza a mover", {self.moverseAlAzar()}) })
+      game.onTick (8000, "la banana se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
 class Comida inherits Consumible (energia = 80, potencia = 20, image = "comida.png") {
@@ -189,12 +204,11 @@ class Comida inherits Consumible (energia = 80, potencia = 20, image = "comida.p
     self.irseDePantalla()
     game.schedule(5000, { 
       self.moverseAlAzar() // reaparece luego de 5 seg.
-      game.onTick (5000, "la comida se empieza a mover", {self.moverseAlAzar()}) })
+      game.onTick (6000, "la comida se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-class BananaPeelDer inherits Consumible (energia = 10, image = "bananaPeel.png") {
+class BananaPeelDer inherits Consumible (image = "bananaPeel.png") {
 	override method aplicarSobre(jugador) {
-		jugador.perderEnergia(energia) // permite 5 pasos menos.
     jugador.moverseArriba(5.randomUpTo(15).truncate(0))
     jugador.moverseDerecha(5.randomUpTo(15).truncate(0))
     game.say(jugador, jugador.decir("Noooooooo"))
@@ -206,9 +220,8 @@ class BananaPeelDer inherits Consumible (energia = 10, image = "bananaPeel.png")
       game.onTick (2000, "la bananaPeelDer se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
-class BananaPeelIzq inherits Consumible (energia = 10, image = "bananaPeel.png") {
+class BananaPeelIzq inherits Consumible (image = "bananaPeel.png") {
 	override method aplicarSobre(jugador) {
-		jugador.perderEnergia(energia) // permite 5 pasos menos.
     jugador.moverseAbajo(5.randomUpTo(15).truncate(0))
     jugador.moverseIzquierda(5.randomUpTo(15).truncate(0))
     game.say(jugador, jugador.decir("Noooooooo"))
@@ -237,7 +250,7 @@ class TarjetaAmarilla inherits Tarjeta (energia = 50, potencia = 10, image = "ye
     self.irseDePantalla()
     game.schedule(5000, { 
       self.moverseAlAzar() // reaparece luego de 5 seg.
-      game.onTick (4000, "la tarjAmarilla se empieza a mover", {self.moverseAlAzar()}) })
+      game.onTick (6000, "la tarjAmarilla se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
 class TarjetaRoja inherits Tarjeta (energia = 100, potencia = 20, image = "redCard.png") {
@@ -250,7 +263,7 @@ class TarjetaRoja inherits Tarjeta (energia = 100, potencia = 20, image = "redCa
     self.irseDePantalla()
     game.schedule(10000, { 
       self.moverseAlAzar() // reaparece luego de 10 seg.
-      game.onTick (2000, "la tarjRoja se empieza a mover", {self.moverseAlAzar()}) })
+      game.onTick (5000, "la tarjRoja se empieza a mover", {self.moverseAlAzar()}) })
   }
 }
 // Pelota
@@ -268,14 +281,10 @@ class Pelota inherits Item (image = "pelota.png") {
 
 object fondo2 {
  method position() = game.at(80,35)
- method image() = "gamefinal.jpg" 
-
-  
+ method image() = "gamefinal.png" 
 }
 
-object fondo3 {
+object menuInicio {
  method position() = game.origin()
- method image() = "jueguitochachi.jpg" 
-
-  
+ method image() = "menuInicio.png"
 }
