@@ -20,19 +20,19 @@ describe "tests de uso de objetos" {
     assert.equals(20, jugador.potencia())
   }
 
-  test "Jugador agarra gaseosa (energia 30 y potencia 5)" {
+  test "Jugador agarra gaseosa (energia 40 y potencia 5)" {
     const gaseosa = new Gaseosa ()
     jugador.perderEnergia(100)
     gaseosa.aplicarSobre(jugador)
-    assert.equals(30, jugador.energia())
+    assert.equals(40, jugador.energia())
     assert.equals(5, jugador.potencia())
   }
 
-  test "Jugador agarra banana (energia 40 y potencia 10)" {
+  test "Jugador agarra banana (energia 60 y potencia 10)" {
     const banana = new Banana ()
     jugador.perderEnergia(100)
     banana.aplicarSobre(jugador)
-    assert.equals(40, jugador.energia())
+    assert.equals(60, jugador.energia())
     assert.equals(10, jugador.potencia())
   }
  
@@ -55,7 +55,7 @@ describe "tests de uso de objetos" {
 
 describe "test de uso de items de movimiento" {
   
-  const jugador = new Jugador (image = "", position = game.at(0,0))
+  const jugador = new Jugador (image = "", position = new MutablePosition(x=0, y=0))
   
   test "Jugador resbala con banana" {
     const banana = new BananaPeelDer ()

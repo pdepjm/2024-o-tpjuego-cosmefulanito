@@ -128,12 +128,11 @@ object jueguito{
                 pelota.irseDePantalla()
                 golesJugador2 += 1
                 game.say(jugador2, "¡Gol para el Jugador 2! Total: " + golesJugador2)
-                //reproducir sonidito.
+                game.sound("gritoGol.mp3").play()
                 game.schedule(3000, {
                     pelota.moverse(xiPelota, yiTodos)
                     self.setearPosicion(jugador1,xiJugador1,yiTodos)
                     self.setearPosicion(jugador2,xiJugador2,yiTodos)
-                    //reiniciar posición jugadores.
                 })
                 self.checkFinal(golesJugador2)
             }
@@ -142,12 +141,11 @@ object jueguito{
                 pelota.irseDePantalla()
                 golesJugador1 += 1
                 game.say(jugador1, "¡Gol para el Jugador 1! Total: " + golesJugador1)
-                //reproducir sonidito.
+                game.sound("gritoGol.mp3").play()
                 game.schedule(3000, {
                     pelota.moverse(xiPelota, yiTodos)
                     self.setearPosicion(jugador1,xiJugador1,yiTodos)
                     self.setearPosicion(jugador2,xiJugador2,yiTodos)
-                    //reiniciar posición jugadores.
                 })
                 self.checkFinal(golesJugador1)
             }
@@ -193,8 +191,8 @@ object jueguito{
     
     method close() {
         self.removeVisual()
-        game.addVisual(fondo2)
-        keyboard.y().onPressDo({game.removeVisual(fondo2) self.menu()})
+        game.addVisual(menuGameOver)
+        keyboard.y().onPressDo({game.removeVisual(menuGameOver) self.menu()})
         keyboard.n().onPressDo({game.stop()})
     }
 

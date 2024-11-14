@@ -28,29 +28,34 @@ class Jugador {
     else if (energia > 0) return 0.2* cantidad
     else return 0
   }
+  method restriccionSuperior(cantCeldas) = self.position().y() + self.ajustarPorEnergia(cantCeldas) <= 98
+  method restriccionInferior(cantCeldas) = self.position().y() - self.ajustarPorEnergia(cantCeldas) >= 1
+  method restriccionDerecha(cantCeldas) = self.position().x() + self.ajustarPorEnergia(cantCeldas) <= 209
+  method restriccionIzquierda(cantCeldas) = self.position().x() - self.ajustarPorEnergia(cantCeldas) >= 10
+
   method moverseArriba(cantCeldas) { 
-    if (self.position().y() + self.ajustarPorEnergia(cantCeldas) <= 98) { // no pasa de yBordeSup.
+    if (self.restriccionSuperior(cantCeldas)) { // no pasa de yBordeSup.
       position.goUp(self.ajustarPorEnergia(cantCeldas)) 
       self.perderEnergia(2) 
       ultimaDireccion = "arriba" 
     } 
   }
   method moverseAbajo(cantCeldas) { 
-    if (self.position().y() - self.ajustarPorEnergia(cantCeldas) >= 1) { // no pasa de yBordeInf.
+    if (self.restriccionInferior(cantCeldas)) { // no pasa de yBordeInf.
       position.goDown(self.ajustarPorEnergia(cantCeldas)) 
       self.perderEnergia(2) 
       ultimaDireccion = "abajo" 
     }
   }
   method moverseDerecha(cantCeldas) { 
-    if (self.position().x() + self.ajustarPorEnergia(cantCeldas) <= 209) {  // no pasa de xBordeDer.
+    if (self.restriccionDerecha(cantCeldas)) {  // no pasa de xBordeDer.
       position.goRight(self.ajustarPorEnergia(cantCeldas)) 
       self.perderEnergia(2) 
       ultimaDireccion = "derecha" 
     }
   }
   method moverseIzquierda(cantCeldas) { 
-    if (self.position().x() - self.ajustarPorEnergia(cantCeldas) >= 10) { // no pasa de xBordeIzq.
+    if (self.restriccionIzquierda(cantCeldas)) { // no pasa de xBordeIzq.
       position.goLeft(self.ajustarPorEnergia(cantCeldas)) 
       self.perderEnergia(2) 
       ultimaDireccion = "izquierda"
@@ -268,20 +273,26 @@ class TarjetaRoja inherits Tarjeta (energia = 100, potencia = 20, image = "redCa
 }
 // Pelota
 class Pelota inherits Item (image = "pelota.png") {
-  method entraEnArcoIzq(xIzq, yInf, ySup) = 
-    self.position().x() < xIzq and 
-    self.position().y() > yInf and
-    self.position().y() < ySup
+  method entraEnArcoIzq(lineaArco, paloInf, paloSup) = 
+    self.position().x() < lineaArco and 
+    self.position().y() > paloInf and
+    self.position().y() < paloSup
 
-  method entraEnArcoDer(xDer, yInf, ySup) = 
-    self.position().x() > xDer and 
-    self.position().y() > yInf and
-    self.position().y() < ySup
+  method entraEnArcoDer(lineaArco, paloInf, paloSup) = 
+    self.position().x() > lineaArco and 
+    self.position().y() > paloInf and
+    self.position().y() < paloSup
+
+  method estaAdentro() = 
+    self.position().x() + 5 <= 209 and
+    self.position().x() - 5 >= 10 and
+    self.position().y() + 5 <= 98 and 
+    self.position().y() - 5 >= 1
 }
 
-object fondo2 {
+object menuGameOver {
  method position() = game.at(80,35)
- method image() = "gamefinal.png" 
+ method image() = "gameOver.png" 
 }
 
 object menuInicio {
