@@ -186,7 +186,7 @@ object jueguito{
     } 
 
     method checkFinal(goles) {
-        if(goles == 5) {self.close()}
+        if(goles == 3) {self.close()}
     }
     
     method close() {

@@ -291,8 +291,8 @@ class Pelota inherits Item (image = "pelota.png") {
 }
 
 object menuGameOver {
- method position() = game.at(80,35)
- method image() = "gameOver.png" 
+ method position() = game.origin()
+ method image() = "menuGameOver.png" 
 }
 
 object menuInicio {
