@@ -1,25 +1,91 @@
 import objects.*
 import main.*
 
-describe "group of tests for jugador" {
+describe "tests de uso de objetos" {
   
-  const jugador = new Jugador(cansancio = 0, imagen = "argentino.png")
+  const jugador = new Jugador (image = "", position = game.at(0,0))
   
-  test "el jugador arranca con cansancio 0" {
-    assert.equals(0, jugador.cansancio())
+  test "Jugador descansado agarra agua (energia 20, potencia 5)" {
+     const agua = new Agua ()
+    jugador.perderEnergia(100)
+    agua.aplicarSobre(jugador)
+    assert.equals(20, jugador.energia())
+    assert.equals(5, jugador.potencia())
+  }
+  test "Jugador agarra comida (energia 80 y potencia 20)" {
+    const comida = new Comida ()
+    jugador.perderEnergia(100)
+    comida.aplicarSobre(jugador)
+    assert.equals(80, jugador.energia())
+    assert.equals(20, jugador.potencia())
   }
 
-  test "el jugador pierde energia al moverse hacia arriba" {
-    jugador.moverteArriba(20)
-    assert.equals(20, jugador.cansancio())
+  test "Jugador agarra gaseosa (energia 30 y potencia 5)" {
+    const gaseosa = new Gaseosa ()
+    jugador.perderEnergia(100)
+    gaseosa.aplicarSobre(jugador)
+    assert.equals(30, jugador.energia())
+    assert.equals(5, jugador.potencia())
   }
 
-  test "el jugador recupera energía" {
-    jugador.cansarse(50)
-    jugador.recuperarEnergia(20)
-    assert.equals(30, jugador.cansancio())
+  test "Jugador agarra banana (energia 40 y potencia 10)" {
+    const banana = new Banana ()
+    jugador.perderEnergia(100)
+    banana.aplicarSobre(jugador)
+    assert.equals(40, jugador.energia())
+    assert.equals(10, jugador.potencia())
+  }
+ 
+  test "jugador recibe tarjeta amarilla y pierde la mitad de su energia " {
+    const contrincante = new Jugador ()
+    const amarilla = new TarjetaAmarilla ()
+    amarilla.aplicarTarjeta(contrincante, jugador)
+    assert.equals(50, jugador.energia())
   }
 
+  test "jugador recibe tarjeta roja y pierde toda su energia " {
+    const contrincante = new Jugador ()
+    const roja = new TarjetaRoja ()
+    roja.aplicarTarjeta(contrincante, jugador)
+    assert.equals(0, jugador.energia())
+  }  
 // assert.that(game.onTick(10000, "movimiento", { jugador.cansancio(0)}))
 
+}
+
+describe "test de uso de items de movimiento" {
+  
+  const jugador = new Jugador (image = "", position = game.at(0,0))
+  
+  test "Jugador resbala con banana" {
+    const banana = new BananaPeelDer ()
+    banana.aplicarSobre(jugador)  
+    assert.notThat((jugador.position().x() == 0) && (jugador.position().y() == 0))
+  }
+
+  test "Jugador sin energia no se mueve " {
+    jugador.perderEnergia(100)
+    jugador.moverseArriba(5)
+    assert.that(jugador.position().y() == 0)
+  }
+  
+}
+
+describe "tests de pelota" {
+
+  const jugador = new Jugador ()
+  test "si jugador esta a derecha de pelota, esta se mueve" {
+    const pelota = new Pelota (position = game.at(50, 110))
+    jugador.moverseDerecha(3)
+    assert.that(pelota.position().x() == pelota.position().x() + (4 + 1))
+  }
+
+  test "la pelota en el arco se gol" {
+    const xLineaArco1 = 10
+    const xLineaArco2 = 208
+    const yInfAmbosArcos = 42
+    const ySupAmbosArcos = 56
+    const pelota = new Pelota (position = game.at(5, 50))
+    assert.that(pelota.entraEnArcoIzq(xLineaArco1,yInfAmbosArcos,ySupAmbosArcos))
+  }
 }

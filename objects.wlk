@@ -1,5 +1,5 @@
 class Jugador {
-  const property image
+  const property image = ""
   var property x = 105
   var property y = 50
   var property position = game.at(x, y)
@@ -120,7 +120,7 @@ class Jugador {
 }
 
 class Item {
-  const property image
+  const property image = ""
   var property position = game.at(-100, -100)
 
   method moverse(xf, yf) {
